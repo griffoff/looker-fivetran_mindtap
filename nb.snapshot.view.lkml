@@ -1,0 +1,225 @@
+view: snapshot {
+  sql_table_name: MT_NB.SNAPSHOT ;;
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.ID ;;
+  }
+
+  dimension: _fivetran_deleted {
+    type: yesno
+    sql: ${TABLE}._FIVETRAN_DELETED ;;
+  }
+
+  dimension: _fivetran_synced {
+    type: string
+    sql: ${TABLE}._FIVETRAN_SYNCED ;;
+  }
+
+  dimension: author {
+    type: string
+    sql: ${TABLE}.AUTHOR ;;
+  }
+
+  dimension: branding_discipline {
+    type: string
+    sql: ${TABLE}.BRANDING_DISCIPLINE ;;
+  }
+
+  dimension: cgi {
+    type: string
+    sql: ${TABLE}.CGI ;;
+  }
+
+  dimension: copyright {
+    type: string
+    sql: ${TABLE}.COPYRIGHT ;;
+  }
+
+  dimension: core_text_isbn {
+    type: string
+    sql: ${TABLE}.CORE_TEXT_ISBN ;;
+  }
+
+  dimension: created_by {
+    type: number
+    sql: ${TABLE}.CREATED_BY ;;
+  }
+
+  dimension_group: created_date {
+    label: "Created"
+    type: time
+    timeframes: [
+      raw,date,month,year, month_name
+      ,fiscal_year,fiscal_quarter_of_year, fiscal_quarter
+    ]
+    sql: to_timestamp(${TABLE}.CREATED_DATE::int/1000) ;;
+  }
+
+  dimension: credits {
+    type: string
+    sql: ${TABLE}.CREDITS ;;
+  }
+
+  dimension: default_path_id {
+    type: number
+    sql: ${TABLE}.DEFAULT_PATH_ID ;;
+  }
+
+  dimension: deployment_id {
+    type: string
+    sql: ${TABLE}.DEPLOYMENT_ID ;;
+  }
+
+  dimension: edition {
+    type: string
+    sql: ${TABLE}.EDITION ;;
+  }
+
+  dimension: integration_type {
+    type: string
+    sql: ${TABLE}.INTEGRATION_TYPE ;;
+  }
+
+  dimension: is_advanced_placement {
+    type: yesno
+    sql: ${TABLE}.IS_ADVANCED_PLACEMENT ;;
+  }
+
+  dimension: is_archived {
+    type: yesno
+    sql: ${TABLE}.IS_ARCHIVED ;;
+  }
+
+  dimension: is_deleted {
+    type: yesno
+    sql: ${TABLE}.IS_DELETED ;;
+  }
+
+  dimension: is_henley {
+    type: yesno
+    sql: ${TABLE}.IS_HENLEY ;;
+  }
+
+  dimension: is_locked {
+    type: yesno
+    sql: ${TABLE}.IS_LOCKED ;;
+  }
+
+  dimension: is_master {
+    type: yesno
+    sql: ${TABLE}.IS_MASTER ;;
+  }
+
+  dimension: is_reader_only {
+    type: yesno
+    sql: ${TABLE}.IS_READER_ONLY ;;
+  }
+
+  dimension: is_released {
+    type: yesno
+    sql: ${TABLE}.IS_RELEASED ;;
+  }
+
+  dimension: isbn {
+    type: string
+    sql: ${TABLE}.ISBN ;;
+  }
+
+  dimension: isbn_type {
+    type: string
+    sql: ${TABLE}.ISBN_TYPE ;;
+  }
+
+  dimension: last_annotation_copy_date {
+    type: number
+    sql: ${TABLE}.LAST_ANNOTATION_COPY_DATE ;;
+  }
+
+  dimension: last_lock_modified_by {
+    type: number
+    sql: ${TABLE}.LAST_LOCK_MODIFIED_BY ;;
+  }
+
+  dimension: last_modified_by {
+    type: number
+    sql: ${TABLE}.LAST_MODIFIED_BY ;;
+  }
+
+  dimension: last_modified_date {
+    type: number
+    sql: ${TABLE}.LAST_MODIFIED_DATE ;;
+  }
+
+  dimension: lock_modified_date {
+    type: number
+    sql: ${TABLE}.LOCK_MODIFIED_DATE ;;
+  }
+
+  dimension: mtcopyright {
+    type: string
+    sql: ${TABLE}.MTCOPYRIGHT ;;
+  }
+
+  dimension: org_id {
+    type: number
+    sql: ${TABLE}.ORG_ID ;;
+  }
+
+  dimension: parent_id {
+    type: number
+    sql: ${TABLE}.PARENT_ID ;;
+  }
+
+  dimension: reader_level {
+    type: string
+    sql: ${TABLE}.READER_LEVEL ;;
+  }
+
+  dimension: root_node_id {
+    type: number
+    sql: ${TABLE}.ROOT_NODE_ID ;;
+  }
+
+  dimension: source_id {
+    type: number
+    sql: ${TABLE}.SOURCE_ID ;;
+  }
+
+  dimension: status {
+    type: number
+    sql: ${TABLE}.STATUS ;;
+  }
+
+  dimension: title {
+    type: string
+    sql: ${TABLE}.TITLE ;;
+  }
+
+  dimension: version {
+    type: number
+    sql: ${TABLE}.VERSION ;;
+  }
+
+  dimension: working_copy_id {
+    type: number
+    sql: ${TABLE}.WORKING_COPY_ID ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [id, app_provision.count]
+  }
+
+  measure: reader_modes {
+    type: sum
+    sql:  case when ${is_reader_only} then 1 end;;
+  }
+
+  measure: lms_integrations  {
+    type: sum
+    sql:  case when ${integration_type} is not null then 1 end;;
+  }
+
+}
