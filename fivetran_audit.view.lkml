@@ -1,6 +1,13 @@
 view: fivetran_audit {
   label: "FiveTran Sync Audit"
-  sql_table_name: MT_NB.FIVETRAN_AUDIT ;;
+#  sql_table_name: MT_NB.FIVETRAN_AUDIT ;;
+  derived_table: {
+    sql:
+      select *
+        ,row_number() over (partition by "TABLE" order by "START") as update_no
+      from MT_NB.FIVETRAN_AUDIT
+      ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -40,10 +47,22 @@ view: fivetran_audit {
     hidden:  yes
   }
 
+  dimension: update_no  {
+    type:  number
+    hidden: yes
+  }
+
+  dimension: initial_sync {
+    label: "Initial Sync"
+    type:  yesno
+    sql: ${update_no} = 1 ;;
+
+  }
+
   dimension_group: start {
     type: time
     timeframes: [raw, date, hour, hour_of_day, day_of_week, time_of_day, minute, month_name, time]
-    sql: ${TABLE}.START ;;
+    sql: ${TABLE}."START" ;;
   }
 
   dimension_group: update_started {
@@ -57,6 +76,13 @@ view: fivetran_audit {
     type: time
     timeframes: [raw, date, hour, hour_of_day, day_of_week, time_of_day, minute, month_name, time]
     sql: ${TABLE}.DONE ;;
+  }
+
+  dimension: duration_days {
+    label: "Duration"
+    type: number
+    sql: datediff(second, ${start_raw}, ${done_raw})/60/60/24 ;;
+    value_format_name: duration_hms
   }
 
   measure: latest_update_time {
