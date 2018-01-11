@@ -1,3 +1,5 @@
+label: "DEPRECATED!!!! DO NOT USE"
+
 connection: "snowflake_mindtap"
 
 fiscal_month_offset: 3
