@@ -1,5 +1,5 @@
 view: user {
-  sql_table_name: MT_NB."USER" ;;
+  sql_table_name: prod_nb."USER" ;;
 
   dimension: id {
     primary_key: yes

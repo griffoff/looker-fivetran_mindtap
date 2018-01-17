@@ -1,5 +1,5 @@
 view: snapshot {
-  sql_table_name: MT_NB.SNAPSHOT ;;
+  sql_table_name: prod_nb.SNAPSHOT ;;
 
   dimension: id {
     primary_key: yes
@@ -79,7 +79,7 @@ view: snapshot {
 
   dimension: integration_type {
     type: string
-    sql: ${TABLE}.INTEGRATION_TYPE ;;
+    sql: nullif(${TABLE}.INTEGRATION_TYPE, 'null') ;;
   }
 
   dimension: is_advanced_placement {
@@ -219,7 +219,7 @@ view: snapshot {
 
   measure: lms_integrations  {
     type: sum
-    sql:  case when ${integration_type} is not null then 1 end;;
+    sql:  case when ${integration_type} is null then 1 end;;
   }
 
 }

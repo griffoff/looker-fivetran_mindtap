@@ -1,5 +1,5 @@
 view: activity_outcome_summary {
-  sql_table_name: MT_NB.ACTIVITY_OUTCOME_SUMMARY ;;
+  sql_table_name: prod_nb.ACTIVITY_OUTCOME_SUMMARY ;;
 
   dimension: id {
     primary_key: yes

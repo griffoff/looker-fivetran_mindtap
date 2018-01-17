@@ -1,5 +1,5 @@
 view: app_provision {
-  sql_table_name: MT_NB.APP_PROVISION ;;
+  sql_table_name: prod_nb.APP_PROVISION ;;
 
   dimension: id {
     primary_key: yes
