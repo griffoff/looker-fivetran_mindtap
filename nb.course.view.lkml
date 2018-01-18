@@ -32,9 +32,14 @@ view: course {
     sql: ${TABLE}.CREATED_DATE ;;
   }
 
-  dimension: end_date {
-    type: number
-    sql: ${TABLE}.END_DATE ;;
+  dimension_group: end_date {
+    label: "End"
+    type: time
+    timeframes: [
+      raw,date,month,year, month_name
+      ,fiscal_year,fiscal_quarter_of_year, fiscal_quarter
+    ]
+    sql: to_timestamp(${TABLE}.END_DATE::int/1000) ;;
   }
 
   dimension: instructor {
@@ -63,9 +68,14 @@ view: course {
     sql: ${TABLE}.SECTION_NUMBER ;;
   }
 
-  dimension: start_date {
-    type: number
-    sql: ${TABLE}.START_DATE ;;
+  dimension_group: start_date {
+    label: "Start"
+    type: time
+    timeframes: [
+      raw,date,month,year, month_name
+      ,fiscal_year,fiscal_quarter_of_year, fiscal_quarter
+    ]
+    sql: to_timestamp(${TABLE}.START_DATE::int/1000) ;;
   }
 
   dimension: timezone {

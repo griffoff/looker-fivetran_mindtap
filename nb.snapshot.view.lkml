@@ -218,8 +218,16 @@ view: snapshot {
   }
 
   measure: lms_integrations  {
+    label: "LMS Integrations"
     type: sum
     sql:  case when ${integration_type} is null then 1 end;;
+  }
+
+  measure: lms_integrations_percent  {
+    label: "LMS Integrations (%)"
+    type: number
+    sql:  ${lms_integrations} / ${count};;
+    value_format_name: percent_1
   }
 
 }

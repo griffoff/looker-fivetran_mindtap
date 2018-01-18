@@ -34,7 +34,18 @@ view: user {
 
   dimension: fname {
     type: string
-    sql: ${TABLE}.FNAME ;;
+     sql:
+      CASE WHEN '{{ _user_attributes["pii_visibility_enabled"] }}' = 'yes' THEN
+        ${TABLE}.FNAME
+      ELSE
+        MD5(${TABLE}.FNAME || 'salt')
+      END ;;
+    html:
+    {% if _user_attributes["pii_visibility_enabled"]  == 'yes' %}
+    {{ value }}
+    {% else %}
+    [Masked]
+    {% endif %}  ;;
   }
 
   dimension: last_modified_by {
@@ -49,12 +60,24 @@ view: user {
 
   dimension: lname {
     type: string
-    sql: ${TABLE}.LNAME ;;
+    sql:
+      CASE WHEN '{{ _user_attributes["pii_visibility_enabled"] }}' = 'yes' THEN
+        ${TABLE}.LNAME
+      ELSE
+        MD5(${TABLE}.LNAME || 'salt')
+      END ;;
+    html:
+    {% if _user_attributes["pii_visibility_enabled"]  == 'yes' %}
+    {{ value }}
+    {% else %}
+    [Masked]
+    {% endif %}  ;;
   }
 
   dimension: password {
     type: string
     sql: ${TABLE}.PASSWORD ;;
+    hidden: yes
   }
 
   dimension: source_id {
@@ -107,6 +130,5 @@ view: user {
   measure: count {
     type: count
     drill_fields: [id, fname, lname, source_name, username]
-    hidden: yes
   }
 }
