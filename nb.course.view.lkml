@@ -45,6 +45,7 @@ view: course {
   dimension: instructor {
     type: string
     sql: ${TABLE}.INSTRUCTOR ;;
+   # hidden: yes
   }
 
   dimension: last_modified_by {
@@ -84,8 +85,8 @@ view: course {
   }
 
   dimension: type {
-    type: number
-    sql: ${TABLE}.TYPE ;;
+    type: string
+    sql: case ${TABLE}.TYPE when 1 then 'REGULAR' when 2 then 'DEMO' when 3 then 'TEST' when 4 then 'WALKME' end ;;
   }
 
   dimension: version {

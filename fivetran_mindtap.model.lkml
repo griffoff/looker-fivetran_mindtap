@@ -23,11 +23,13 @@ explore: snapshot {
   join: course {
     sql_on: ${snapshot.org_id} = ${course.org_id} ;;
     relationship: one_to_one
+    type: inner
   }
   join: org {
     sql_on: ${course.org_id} = ${org.id}
           and ${org.parent_id} not in (500, 503, 505);;
     relationship: one_to_one
+    type: inner
   }
   join: students {
     from:  user_org_profile
@@ -35,11 +37,13 @@ explore: snapshot {
     sql_on: ${snapshot.org_id} = ${students.org_id}
           and ${students.role_id} = 1004;;
     relationship: one_to_many
+    type: inner
   }
   join: student {
     from: user
     sql_on: ${students.user_id} = ${student.id};;
     relationship: one_to_one
+    type: inner
   }
   join: instructors {
     from:  user_org_profile
@@ -47,21 +51,25 @@ explore: snapshot {
     sql_on: ${snapshot.org_id} = ${instructors.org_id}
           and ${instructors.role_id} = 1003;;
     relationship: one_to_many
+    type: inner
   }
   join: instructor {
     from: user
     sql_on: ${instructors.user_id} = ${instructor.id} ;;
     relationship: one_to_one
+    type: inner
   }
   join: university {
     from: org
     sql_on: ${org.parent_id} = ${university.id} ;;
     relationship: many_to_one
+    type: inner
   }
   join: snapshot_created_by_user {
     from: user
     sql_on: ${snapshot.created_by}=${snapshot_created_by_user.id} ;;
     relationship: many_to_one
+    type: inner
   }
   join: master {
     from: snapshot
@@ -74,6 +82,7 @@ explore: snapshot {
     from: user
     sql_on: ${master.created_by}=${master_created_by_user.id} ;;
     relationship: many_to_one
+    type: inner
   }
   join: dim_course {
     sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
@@ -89,14 +98,17 @@ explore: app_provision {
   join: master {
     from: snapshot
     sql_on: ${app_provision.snapshot_id}=${master.id} ;;
+    type: inner
   }
   join: app {
     sql_on: ${app_provision.app_id}=${app.id} ;;
     relationship: one_to_many
+    type: inner
   }
   join: snapshot {
     sql_on: ${snapshot.parent_id}=${master.id};;
     relationship: one_to_many
+    type: inner
   }
 }
 
