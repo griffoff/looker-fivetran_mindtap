@@ -1,16 +1,9 @@
+# these must be included first so that the connection is overridden
+include: "/core/common.model"
+include: "/core/fivetran.view"
+
 connection: "snowflake_mindtap"
 label: "MindTap source data"
-
-fiscal_month_offset: 3
-
-named_value_format: duration_hms {
-  value_format: "hh:mm:ss"
-}
-
-named_value_format: duration_dhm {
-  value_format: "d \d\a\y\s hh:mm"
-}
-
 
 # include all the dashboards
 include: "*.dashboard"
