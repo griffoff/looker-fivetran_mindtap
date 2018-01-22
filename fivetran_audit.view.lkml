@@ -29,6 +29,10 @@ view: fivetran_audit {
       ;;
   }
 
+  set: table_sync_details {
+    fields: [schema, table, start_raw, done_raw, duration_days, message, status, rows_updated_or_inserted, update_recency]
+  }
+
   dimension: id {
     primary_key: yes
     type: string
@@ -144,16 +148,18 @@ view: fivetran_audit {
   measure: update_recency {
     type: number
     sql:  timediff(minute, ${latest_update_time}, current_timestamp) / 60 / 24 ;;
-    value_format_name: duration_hms
+    value_format_name: duration_dhm
+    drill_fields: [table_sync_details*]
   }
 
   measure: rows_updated_or_inserted {
     type: sum
     sql: ${TABLE}.ROWS_UPDATED_OR_INSERTED ;;
+    drill_fields: [table_sync_details*]
   }
 
   measure: count {
     type: count
-    drill_fields: [schema, table, start_time, update_started_time, done_time, status, progress_time, rows_updated_or_inserted]
+    drill_fields: [table_sync_details*]
   }
 }
