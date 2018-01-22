@@ -1,5 +1,4 @@
-# these must be included first so that the connection is overridden
-include: "/core/common.model"
+include: "/core/common.lkml"
 include: "/core/fivetran.view"
 
 connection: "snowflake_mindtap"
