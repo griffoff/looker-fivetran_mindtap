@@ -1,5 +1,5 @@
-view: activity_outcome_summary {
-  sql_table_name: prod_nb.ACTIVITY_OUTCOME_SUMMARY ;;
+view: org {
+  sql_table_name: PROD_NB.ORG ;;
 
   dimension: id {
     primary_key: yes
@@ -17,24 +17,10 @@ view: activity_outcome_summary {
     sql: ${TABLE}._FIVETRAN_SYNCED ;;
   }
 
-  dimension: activity_id {
+  dimension: children_integer_idx {
     type: number
-    sql: ${TABLE}.ACTIVITY_ID ;;
-  }
-
-  dimension: alert {
-    type: string
-    sql: ${TABLE}.ALERT ;;
-  }
-
-  dimension: attempts_to_grade {
-    type: number
-    sql: ${TABLE}.ATTEMPTS_TO_GRADE ;;
-  }
-
-  dimension: class_average {
-    type: number
-    sql: ${TABLE}.CLASS_AVERAGE ;;
+    value_format_name: id
+    sql: ${TABLE}.CHILDREN_INTEGER_IDX ;;
   }
 
   dimension: created_by {
@@ -47,9 +33,9 @@ view: activity_outcome_summary {
     sql: ${TABLE}.CREATED_DATE ;;
   }
 
-  dimension: last_computed_score_time {
-    type: number
-    sql: ${TABLE}.LAST_COMPUTED_SCORE_TIME ;;
+  dimension: external_id {
+    type: string
+    sql: ${TABLE}.EXTERNAL_ID ;;
   }
 
   dimension: last_modified_by {
@@ -62,29 +48,19 @@ view: activity_outcome_summary {
     sql: ${TABLE}.LAST_MODIFIED_DATE ;;
   }
 
-  dimension: last_score_modified_time {
-    type: number
-    sql: ${TABLE}.LAST_SCORE_MODIFIED_TIME ;;
+  dimension: name {
+    type: string
+    sql: ${TABLE}.NAME ;;
   }
 
-  dimension: learning_path_id {
+  dimension: org_type {
     type: number
-    sql: ${TABLE}.LEARNING_PATH_ID ;;
+    sql: ${TABLE}.ORG_TYPE ;;
   }
 
   dimension: parent_id {
     type: number
     sql: ${TABLE}.PARENT_ID ;;
-  }
-
-  dimension: snapshot_id {
-    type: number
-    sql: ${TABLE}.SNAPSHOT_ID ;;
-  }
-
-  dimension: submissions {
-    type: number
-    sql: ${TABLE}.SUBMISSIONS ;;
   }
 
   dimension: version {
@@ -94,6 +70,6 @@ view: activity_outcome_summary {
 
   measure: count {
     type: count
-    drill_fields: [id]
+    drill_fields: [id, name, course.count, user_org_profile.count]
   }
 }

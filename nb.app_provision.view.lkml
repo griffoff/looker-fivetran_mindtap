@@ -1,5 +1,5 @@
-view: activity_outcome_summary {
-  sql_table_name: prod_nb.ACTIVITY_OUTCOME_SUMMARY ;;
+view: app_provision {
+  sql_table_name: prod_nb.APP_PROVISION ;;
 
   dimension: id {
     primary_key: yes
@@ -17,24 +17,15 @@ view: activity_outcome_summary {
     sql: ${TABLE}._FIVETRAN_SYNCED ;;
   }
 
-  dimension: activity_id {
+  dimension: app_id {
     type: number
-    sql: ${TABLE}.ACTIVITY_ID ;;
+    # hidden: yes
+    sql: ${TABLE}.APP_ID ;;
   }
 
-  dimension: alert {
+  dimension: app_snapshot_gated_status {
     type: string
-    sql: ${TABLE}.ALERT ;;
-  }
-
-  dimension: attempts_to_grade {
-    type: number
-    sql: ${TABLE}.ATTEMPTS_TO_GRADE ;;
-  }
-
-  dimension: class_average {
-    type: number
-    sql: ${TABLE}.CLASS_AVERAGE ;;
+    sql: ${TABLE}.APP_SNAPSHOT_GATED_STATUS ;;
   }
 
   dimension: created_by {
@@ -47,11 +38,6 @@ view: activity_outcome_summary {
     sql: ${TABLE}.CREATED_DATE ;;
   }
 
-  dimension: last_computed_score_time {
-    type: number
-    sql: ${TABLE}.LAST_COMPUTED_SCORE_TIME ;;
-  }
-
   dimension: last_modified_by {
     type: number
     sql: ${TABLE}.LAST_MODIFIED_BY ;;
@@ -62,29 +48,20 @@ view: activity_outcome_summary {
     sql: ${TABLE}.LAST_MODIFIED_DATE ;;
   }
 
-  dimension: last_score_modified_time {
+  dimension: last_op {
     type: number
-    sql: ${TABLE}.LAST_SCORE_MODIFIED_TIME ;;
-  }
-
-  dimension: learning_path_id {
-    type: number
-    sql: ${TABLE}.LEARNING_PATH_ID ;;
-  }
-
-  dimension: parent_id {
-    type: number
-    sql: ${TABLE}.PARENT_ID ;;
+    sql: ${TABLE}.LAST_OP ;;
   }
 
   dimension: snapshot_id {
     type: number
+    # hidden: yes
     sql: ${TABLE}.SNAPSHOT_ID ;;
   }
 
-  dimension: submissions {
+  dimension: status {
     type: number
-    sql: ${TABLE}.SUBMISSIONS ;;
+    sql: ${TABLE}.STATUS ;;
   }
 
   dimension: version {
@@ -94,6 +71,6 @@ view: activity_outcome_summary {
 
   measure: count {
     type: count
-    drill_fields: [id]
+    drill_fields: [id, app.id, app.name, app.display_name, snapshot.id]
   }
 }
