@@ -51,10 +51,12 @@ view: snapshot {
     label: "Created"
     type: time
     timeframes: [
-      raw,date,month,year, month_name
+      date, month,year, month_name
       ,fiscal_year,fiscal_quarter_of_year, fiscal_quarter
+      ,raw
+      ,time
     ]
-    sql: to_timestamp(${TABLE}.CREATED_DATE::int/1000) ;;
+    sql: convert_timezone('UTC', to_timestamp(${TABLE}.CREATED_DATE, 3)) ;;
   }
 
   dimension: credits {
