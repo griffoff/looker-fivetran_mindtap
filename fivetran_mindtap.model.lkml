@@ -93,8 +93,9 @@ explore: snapshot {
 explore: app_provision {
   extends: [snapshot]
   label: "Apps"
-  join: snapshot {
-    sql_on: ${app_provision.snapshot_id}=${snapshot.id} ;;
+  join: master {
+    from: snapshot
+    sql_on: ${app_provision.snapshot_id}=${master.id} ;;
     type: inner
   }
   join: app {
@@ -102,9 +103,8 @@ explore: app_provision {
     relationship: one_to_many
     type: inner
   }
-  join: master {
-    from: snapshot
-    sql_on: ${snapshot.parent_id}=${master.id};;
+  join: snapshot {
+    sql_on: ${master.id} = ${snapshot.parent_id};;
     relationship: one_to_many
     type: inner
   }
