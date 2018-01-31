@@ -12,10 +12,7 @@ view: fivetran_audit {
         from PROD_CLHM.FIVETRAN_AUDIT
         union all
         select *
-        from mt_nb.FIVETRAN_AUDIT
-        union all
-        select *
-        from prod_nb.FIVETRAN_AUDIT
+        from PROD_NB.FIVETRAN_AUDIT
       )
     select
         *
