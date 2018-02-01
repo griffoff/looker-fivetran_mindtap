@@ -12,8 +12,9 @@ view: snapshot {
     sql: ${TABLE}._FIVETRAN_DELETED ;;
   }
 
-  dimension: _fivetran_synced {
-    type: string
+  dimension_group: _fivetran_synced {
+    type: time
+    timeframes: [raw, date, time]
     sql: ${TABLE}._FIVETRAN_SYNCED ;;
   }
 
