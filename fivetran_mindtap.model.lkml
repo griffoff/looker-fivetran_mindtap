@@ -16,7 +16,8 @@ include: "*.view"
 explore: fivetran_audit{}
 
 explore: snapshot {
-  sql_always_where: ${snapshot.is_master} = 0 ;;
+  sql_always_where: not ${snapshot._fivetran_deleted} ;;
+  # ${snapshot.is_master} = 0
   join: course {
     sql_on: ${snapshot.org_id} = ${course.org_id} ;;
     relationship: one_to_one
@@ -103,7 +104,7 @@ explore: app_provision {
     type: inner
   }
   join: snapshot {
-    sql_on: ${snapshot.parent_id}=${master.id};;
+    sql_on: ${master.id} = ${snapshot.parent_id};;
     relationship: one_to_many
     type: inner
   }
