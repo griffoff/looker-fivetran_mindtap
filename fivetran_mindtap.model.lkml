@@ -25,7 +25,7 @@ explore: snapshot {
   }
   join: org {
     sql_on: ${course.org_id} = ${org.id}
-          and ${org.parent_id} not in (500, 503, 505);;
+          --and ${org.parent_id} not in (500, 503, 505);;
     relationship: one_to_one
     type: inner
   }
@@ -84,9 +84,11 @@ explore: snapshot {
   }
   join: dim_course {
     sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
+    relationship: one_to_one
   }
   join: dim_product {
     sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
+    relationship: many_to_one
   }
 }
 
@@ -110,30 +112,32 @@ explore: app_provision {
   }
 }
 
-explore: app_provision_old {
-  from:  app_provision
-  view_name: app_provision
-  join: master {
-    from: snapshot
-    sql_on: ${app_provision.snapshot_id}=${master.id} ;;
-  }
-  join: app {
-    sql_on: ${app_provision.app_id}=${app.id} ;;
-    relationship: one_to_many
-  }
-  join: master_created_by_user {
-    from: user
-    sql_on: ${master.created_by}=${master_created_by_user.id} ;;
-    relationship: many_to_one
-  }
-  join: snapshot {
-    sql_on: ${snapshot.parent_id}=${master.id}
-      and ${snapshot.is_master} = 0;;
-    relationship: one_to_many
-  }
-  join: snapshot_created_by_user {
-    from: user
-    sql_on: ${snapshot.created_by}=${snapshot_created_by_user.id} ;;
-    relationship: many_to_one
-  }
-}
+explore: app_action {}
+
+# explore: app_provision_old {
+#   from:  app_provision
+#   view_name: app_provision
+#   join: master {
+#     from: snapshot
+#     sql_on: ${app_provision.snapshot_id}=${master.id} ;;
+#   }
+#   join: app {
+#     sql_on: ${app_provision.app_id}=${app.id} ;;
+#     relationship: one_to_many
+#   }
+#   join: master_created_by_user {
+#     from: user
+#     sql_on: ${master.created_by}=${master_created_by_user.id} ;;
+#     relationship: many_to_one
+#   }
+#   join: snapshot {
+#     sql_on: ${snapshot.parent_id}=${master.id}
+#       and ${snapshot.is_master} = 0;;
+#     relationship: one_to_many
+#   }
+#   join: snapshot_created_by_user {
+#     from: user
+#     sql_on: ${snapshot.created_by}=${snapshot_created_by_user.id} ;;
+#     relationship: many_to_one
+#   }
+#}
