@@ -1,5 +1,11 @@
 view: user_org_profile {
-  sql_table_name: PROD_NB.USER_ORG_PROFILE ;;
+  derived_table: {
+    sql:
+      select *
+      from PROD_NB.USER_ORG_PROFILE
+      where ORG_ID != 501;;
+  }
+  #sql_table_name: PROD_NB.USER_ORG_PROFILE ;;
 
   dimension: id {
     primary_key: yes
@@ -81,5 +87,13 @@ view: user_org_profile {
   measure: count {
     type: count
     drill_fields: [id, org.id, org.name]
+  }
+
+  measure: user_count {
+    type: number
+    sql: count(distinct ${user_id}) ;;
+    #type: count_distinct
+    #sql_distinct_key: ${user_id} ;;
+    hidden: yes
   }
 }

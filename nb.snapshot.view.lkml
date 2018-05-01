@@ -211,11 +211,13 @@ view: snapshot {
   }
 
   measure: count {
+    label: "# Snapshots"
     type: count
     drill_fields: [id, app_provision.count]
   }
 
   measure: reader_modes {
+    label: "Reader Modes"
     type: sum
     sql:  case when ${is_reader_only} then 1 end;;
   }
@@ -231,6 +233,45 @@ view: snapshot {
     type: number
     sql:  ${lms_integrations} / ${count};;
     value_format_name: percent_1
+  }
+
+}
+
+# include: "fivetran_mindtap.model.lkml"
+
+view: snapshot_summary {
+  view_label: "Snapshot"
+  derived_table: {
+    explore_source: snapshot {
+      column: lms_integrations { field: snapshot.lms_integrations }
+      column: student_count { field: students.user_count }
+      column: id { field: snapshot.id }
+      column: reader_modes { field: snapshot.reader_modes }
+    }
+  }
+  measure: lms_integrations {
+    label: "Snapshot LMS Integrations"
+    type: sum
+    hidden: yes
+  }
+  measure: student_count {
+    label: "# Students"
+    type: sum
+  }
+  dimension: id {
+    hidden: yes
+    type: number
+    primary_key: yes
+  }
+  measure: reader_modes {
+    label: "Reader Modes"
+    type: sum
+    hidden: yes
+  }
+  measure: count {
+    label: "# Snapshots"
+    type: count
+    hidden: yes
   }
 
 }
