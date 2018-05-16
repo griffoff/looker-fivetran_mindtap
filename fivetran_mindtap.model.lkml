@@ -31,7 +31,7 @@ explore: snapshot {
   }
   join: students {
     from:  user_org_profile
-    fields: []
+    fields: [students.user_count]
     sql_on: ${snapshot.org_id} = ${students.org_id}
           and ${students.role_id} = 1004;;
     relationship: one_to_many
@@ -56,6 +56,10 @@ explore: snapshot {
     sql_on: ${instructors.user_id} = ${instructor.id} ;;
     relationship: one_to_one
     type: inner
+  }
+  join: snapshot_summary {
+    sql_on: ${snapshot.id} = ${snapshot_summary.id};;
+    relationship: one_to_one
   }
   join: university {
     from: org
