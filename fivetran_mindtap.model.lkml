@@ -15,7 +15,26 @@ include: "*.view"
 
 explore: fivetran_audit{}
 
+explore: node {
+  extension: required
+
+  join: activity {
+    sql_on: ${node.id} = ${activity.id} ;;
+    relationship: one_to_one
+  }
+}
+
+explore: activity_outcome {
+  extension: required
+
+  join: activity_outcome_detail {
+    sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
+    relationship: one_to_many
+  }
+}
+
 explore: snapshot {
+  extends: [node, activity_outcome]
   sql_always_where: not ${snapshot._fivetran_deleted} ;;
   # ${snapshot.is_master} = 0
   join: course {
@@ -93,6 +112,15 @@ explore: snapshot {
   join: dim_product {
     sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
     relationship: many_to_one
+  }
+  join: node {
+    sql_on: ${snapshot.id} = ${node.snapshot_id};;
+    relationship: one_to_many
+  }
+  join: activity_outcome {
+    sql_on: ${students.user_id} = ${activity_outcome.user_id}
+          and ${node.id} = ${activity_outcome.activity_id};;
+    relationship: one_to_many
   }
 }
 
