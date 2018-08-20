@@ -1,5 +1,15 @@
 view: activity_outcome_detail {
-  sql_table_name: PROD_NB.ACTIVITY_OUTCOME_DETAIL ;;
+  derived_table: {
+    sql:
+      select
+        *
+        ,lead(take_start_time) over (partition by activity_id, user_id order by take_start_time) as next_take_start_time
+      from PROD_NB.ACTIVITY_OUTCOME_DETAIL
+      ;;
+
+    persist_for: "24 hours"
+  }
+  #sql_table_name: PROD_NB.ACTIVITY_OUTCOME_DETAIL ;;
 
   dimension: id {
     primary_key: yes
@@ -28,24 +38,26 @@ view: activity_outcome_detail {
 
   dimension: activity_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}."ACTIVITY_ID" ;;
   }
 
   dimension: activity_outcome_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}."ACTIVITY_OUTCOME_ID" ;;
   }
 
   dimension: created_by {
     type: number
     sql: ${TABLE}."CREATED_BY" ;;
+    hidden: yes
   }
 
   dimension: created_date {
     type: number
     sql: ${TABLE}."CREATED_DATE" ;;
+    hidden: yes
   }
 
   dimension: is_auto_submitted {
@@ -76,6 +88,7 @@ view: activity_outcome_detail {
   dimension: last_modified_by {
     type: number
     sql: ${TABLE}."LAST_MODIFIED_BY" ;;
+    hidden: yes
   }
 
   dimension: last_modified_date {
@@ -100,7 +113,9 @@ view: activity_outcome_detail {
 
   dimension: score {
     type: number
-    sql: ${TABLE}."SCORE" ;;
+    #sql: ${TABLE}."SCORE" ;;
+    sql: ${points_earned}/nullif(${points_possible}, 0) ;;
+    value_format_name: percent_1
   }
 
   dimension: status {
@@ -111,6 +126,7 @@ view: activity_outcome_detail {
   dimension: take_end_time {
     type: number
     sql: ${TABLE}."TAKE_END_TIME" ;;
+    hidden: yes
   }
 
   dimension: take_id {
@@ -124,13 +140,19 @@ view: activity_outcome_detail {
   }
 
   dimension: take_start_time {
-    type: number
-    sql: ${TABLE}."TAKE_START_TIME" ;;
+    type: date_time
+    sql: to_timestamp(${TABLE}."TAKE_START_TIME", 3) ;;
+  }
+
+  dimension: next_take_start_time {
+    type: date_time
+    sql: to_timestamp(${TABLE}."NEXT_TAKE_START_TIME", 3) ;;
   }
 
   dimension: user_id {
     type: number
     sql: ${TABLE}."USER_ID" ;;
+    hidden: yes
   }
 
   dimension: version {
