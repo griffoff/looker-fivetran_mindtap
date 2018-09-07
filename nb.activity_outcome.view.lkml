@@ -30,6 +30,7 @@ view: activity_outcome {
     type: number
     # hidden: yes
     sql: ${TABLE}."ACTIVITY_ID" ;;
+    hidden: yes
   }
 
   dimension: alert {
@@ -45,11 +46,12 @@ view: activity_outcome {
   dimension: created_by {
     type: number
     sql: ${TABLE}."CREATED_BY" ;;
+    hidden: yes
   }
 
   dimension: created_date {
-    type: number
-    sql: ${TABLE}."CREATED_DATE" ;;
+    type: date_time
+    sql: to_timestamp(${TABLE}."CREATED_DATE", 3) ;;
   }
 
   dimension: current_take_id {
@@ -60,11 +62,14 @@ view: activity_outcome {
   dimension: edited_score {
     type: number
     sql: ${TABLE}."EDITED_SCORE" ;;
+    hidden: yes
   }
 
   dimension: effective_score {
     type: number
-    sql: ${TABLE}."EFFECTIVE_SCORE" ;;
+    sql: ${points_earned}/nullif(${points_possible},0) ;;
+    #sql: ${TABLE}."EFFECTIVE_SCORE"/100 ;;
+    value_format_name: percent_1
   }
 
   dimension: has_late_penalty {
@@ -95,16 +100,17 @@ view: activity_outcome {
   dimension: last_modified_by {
     type: number
     sql: ${TABLE}."LAST_MODIFIED_BY" ;;
+    hidden: yes
   }
 
   dimension: last_modified_date {
-    type: number
-    sql: ${TABLE}."LAST_MODIFIED_DATE" ;;
+    type: date_time
+    sql: to_timestamp(${TABLE}."LAST_MODIFIED_DATE", 3) ;;
   }
 
   dimension: last_score_modified_time {
-    type: number
-    sql: ${TABLE}."LAST_SCORE_MODIFIED_TIME" ;;
+    type: date_time
+    sql: to_timestamp(${TABLE}."LAST_SCORE_MODIFIED_TIME", 3) ;;
   }
 
   dimension: points_earned {
@@ -125,11 +131,13 @@ view: activity_outcome {
   dimension: snapshot_id {
     type: number
     sql: ${TABLE}."SNAPSHOT_ID" ;;
+    hidden: yes
   }
 
   dimension: user_id {
     type: number
     sql: ${TABLE}."USER_ID" ;;
+    hidden: yes
   }
 
   dimension: version {

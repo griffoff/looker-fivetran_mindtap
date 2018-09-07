@@ -29,8 +29,8 @@ view: user_org_profile {
   }
 
   dimension: created_date {
-    type: number
-    sql: ${TABLE}.CREATED_DATE ;;
+    type: date
+    sql: to_timestamp(${TABLE}.CREATED_DATE, 3);;
   }
 
   dimension: dropped_by {
@@ -94,6 +94,6 @@ view: user_org_profile {
     sql: count(distinct ${user_id}) ;;
     #type: count_distinct
     #sql_distinct_key: ${user_id} ;;
-    hidden: yes
+    hidden: no
   }
 }

@@ -4,10 +4,9 @@ include: "/core/fivetran.view"
 connection: "snowflake_mindtap"
 label: "MindTap source data"
 
-# include all the dashboards
-include: "*.dashboard"
 include: "/cube/dim_product.view"
 include: "/cube/dim_course.view"
+include: "/cube/raw_ga.ga_data_parsed.view"
 
 # include all the views
 include: "*.view"
@@ -44,15 +43,31 @@ explore: snapshot {
   }
   join: org {
     sql_on: ${course.org_id} = ${org.id}
-          --and ${org.parent_id} not in (500, 503, 505);;
+      --and ${org.parent_id} not in (500, 503, 505);;
     relationship: one_to_one
+    type: inner
+  }
+  join: user_org_profile {
+    #fields: [user_org_profile.user_count, user_org_profile.created_date]
+    sql_on: ${snapshot.org_id} = ${user_org_profile.org_id};;
+    relationship: one_to_many
+    type: inner
+  }
+  join: user {
+    sql_on: ${user_org_profile.user_id} = ${user.id};;
+    relationship: one_to_one
+    type: inner
+  }
+  join: role {
+    sql_on: ${user_org_profile.role_id} = ${role.id} ;;
+    relationship: many_to_one
     type: inner
   }
   join: students {
     from:  user_org_profile
     fields: [students.user_count]
     sql_on: ${snapshot.org_id} = ${students.org_id}
-          and ${students.role_id} = 1004;;
+      and ${students.role_id} = 1004;;
     relationship: one_to_many
     type: inner
   }
@@ -66,7 +81,7 @@ explore: snapshot {
     from:  user_org_profile
     fields: []
     sql_on: ${snapshot.org_id} = ${instructors.org_id}
-          and ${instructors.role_id} = 1003;;
+      and ${instructors.role_id} = 1003;;
     relationship: one_to_many
     type: inner
   }
@@ -95,7 +110,7 @@ explore: snapshot {
   join: master {
     from: snapshot
     sql_on: ${snapshot.parent_id} = ${master.id}
-          and ${master.is_master} = 1;;
+      and ${master.is_master} = 1;;
     type: inner
     relationship: many_to_one
   }
@@ -119,9 +134,17 @@ explore: snapshot {
   }
   join: activity_outcome {
     sql_on: ${students.user_id} = ${activity_outcome.user_id}
-          and ${node.id} = ${activity_outcome.activity_id};;
+      and ${node.id} = ${activity_outcome.activity_id};;
     relationship: one_to_many
   }
+#   join: ga_data_parsed {
+#     sql_on: ${activity_outcome_detail.activity_id} = ${ga_data_parsed.activityid}
+#       and ${student.source_id} = ${ga_data_parsed.userssoguid}
+#       and ${activity_outcome_detail.take_start_time} <= ${ga_data_parsed.hit_raw}
+#       and coalesce(${activity_outcome_detail.next_take_start_time}, '9999-12-31') > ${ga_data_parsed.hit_raw}
+#       ;;
+#     relationship: one_to_many
+#   }
 }
 
 explore: app_provision {
