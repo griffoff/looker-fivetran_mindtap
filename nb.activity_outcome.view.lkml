@@ -49,8 +49,9 @@ view: activity_outcome {
     hidden: yes
   }
 
-  dimension: created_date {
-    type: date_time
+  dimension_group: created_date {
+    type: time
+    timeframes: [raw, date, time, year, month, month_name]
     sql: to_timestamp(${TABLE}."CREATED_DATE", 3) ;;
   }
 
