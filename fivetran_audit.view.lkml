@@ -1,4 +1,4 @@
-include: "/core/fivetran.view"
+include: "//core/fivetran.view"
 view: fivetran_audit {
   extends: [fivetran_audit_base]
   label: "FiveTran Sync Audit"

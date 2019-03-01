@@ -151,8 +151,8 @@ view: snapshot {
   }
 
   dimension: last_modified_date {
-    type: number
-    sql: ${TABLE}.LAST_MODIFIED_DATE ;;
+    type: date_time
+    sql:TO_TIMESTAMP(${TABLE}.LAST_MODIFIED_DATE) ;;
   }
 
   dimension: lock_modified_date {

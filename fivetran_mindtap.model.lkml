@@ -1,12 +1,14 @@
-include: "/core/common.lkml"
-include: "/core/fivetran.view"
+include: "//core/common.lkml"
+include: "//core/fivetran.view"
 
 connection: "snowflake_mindtap"
 label: "MindTap source data"
-
-include: "/cube/dim_product.view"
-include: "/cube/dim_course.view"
-include: "/cube/raw_ga.ga_data_parsed.view"
+include: "//cube/dim_date.view"
+include: "//cube/dim_product.view"
+include: "//cube/dim_course.view"
+include: "//cube/raw_ga.ga_data_parsed.view"
+include: "//cube/dim_*"
+include: "//cube/fact_activation.view"
 
 # include all the views
 include: "*.view"
