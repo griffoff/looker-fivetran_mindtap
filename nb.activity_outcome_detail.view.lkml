@@ -4,7 +4,7 @@ view: activity_outcome_detail {
       select
         *
         ,lead(take_start_time) over (partition by activity_id, user_id order by take_start_time) as next_take_start_time
-      from PROD_NB.ACTIVITY_OUTCOME_DETAIL
+      from mindtap.PROD_NB.ACTIVITY_OUTCOME_DETAIL
       ;;
 
     persist_for: "24 hours"

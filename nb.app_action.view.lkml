@@ -1,5 +1,5 @@
 view: app_action {
-  sql_table_name: PROD_NB.APP_ACTION ;;
+  sql_table_name: mindtap.PROD_NB.APP_ACTION ;;
 
   dimension: id {
     primary_key: yes

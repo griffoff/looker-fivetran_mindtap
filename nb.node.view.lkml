@@ -1,5 +1,5 @@
 view: node {
-  sql_table_name: PROD_NB.NODE ;;
+  sql_table_name: mindtap.PROD_NB.NODE ;;
 
   dimension: id {
     primary_key: yes

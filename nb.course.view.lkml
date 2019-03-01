@@ -1,5 +1,5 @@
 view: course {
-  sql_table_name: PROD_NB.COURSE ;;
+  sql_table_name: mindtap.PROD_NB.COURSE ;;
 
   dimension: id {
     primary_key: yes

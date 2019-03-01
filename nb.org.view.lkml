@@ -1,5 +1,5 @@
 view: org {
-  sql_table_name: PROD_NB.ORG ;;
+  sql_table_name: mindtap.PROD_NB.ORG ;;
 
   dimension: id {
     primary_key: yes

@@ -7,13 +7,13 @@ view: fivetran_audit {
     sql:
       with audit as (
         select *
-        from PROD_ONEDRIVE.FIVETRAN_AUDIT
+        from mindtap.PROD_ONEDRIVE.FIVETRAN_AUDIT
         union all
         select *
-        from PROD_CLHM.FIVETRAN_AUDIT
+        from mindtap.PROD_CLHM.FIVETRAN_AUDIT
         union all
         select *
-        from PROD_NB.FIVETRAN_AUDIT
+        from mindtap.PROD_NB.FIVETRAN_AUDIT
       )
     select
         *

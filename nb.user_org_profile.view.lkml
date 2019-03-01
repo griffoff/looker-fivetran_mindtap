@@ -2,7 +2,7 @@ view: user_org_profile {
   derived_table: {
     sql:
       select *
-      from PROD_NB.USER_ORG_PROFILE
+      from mindtap.PROD_NB.USER_ORG_PROFILE
       where ORG_ID != 501;;
   }
   #sql_table_name: PROD_NB.USER_ORG_PROFILE ;;

@@ -1,5 +1,5 @@
 view: activity_outcome {
-  sql_table_name: PROD_NB.ACTIVITY_OUTCOME ;;
+  sql_table_name: mindtap.PROD_NB.ACTIVITY_OUTCOME ;;
 
   dimension: id {
     primary_key: yes

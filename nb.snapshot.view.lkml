@@ -1,5 +1,5 @@
 view: snapshot {
-  sql_table_name: prod_nb.SNAPSHOT ;;
+  sql_table_name: mindtap.prod_nb.SNAPSHOT ;;
 
   dimension: id {
     primary_key: yes

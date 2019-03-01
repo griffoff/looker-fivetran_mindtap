@@ -1,7 +1,8 @@
 include: "//core/common.lkml"
 include: "//core/fivetran.view"
 
-connection: "snowflake_mindtap"
+# connection: "snowflake_mindtap"
+connection: "snowflake_prod"
 label: "MindTap source data"
 include: "//cube/dim_date.view"
 include: "//cube/dim_product.view"

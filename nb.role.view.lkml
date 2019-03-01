@@ -1,5 +1,5 @@
 view: role {
-  sql_table_name: PROD_NB.ROLE ;;
+  sql_table_name: mindtap.PROD_NB.ROLE ;;
 
   dimension: id {
     primary_key: yes

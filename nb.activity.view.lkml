@@ -1,5 +1,5 @@
 view: activity {
-  sql_table_name: PROD_NB.ACTIVITY ;;
+  sql_table_name: mindtap.PROD_NB.ACTIVITY ;;
 
   dimension: app_activity_id {
     primary_key: yes
