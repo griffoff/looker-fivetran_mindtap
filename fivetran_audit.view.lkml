@@ -41,4 +41,14 @@ view: fivetran_audit {
     hidden: no
   }
 
+  dimension: database_name {
+    sql:'MINDTAP' ;;
+  }
+
+  measure: db_rows_updated_or_inserted {
+    label: "Mindtap"
+    type: number
+    sql: ${rows_updated_or_inserted} ;;
+  }
+
 }
