@@ -29,10 +29,16 @@ explore: node {
 explore: activity_outcome {
   extension: required
 
+  join: activity_outcome_latest_grade {
+    sql_on: ${activity_outcome.id} = ${activity_outcome_latest_grade.activity_outcome_id} ;;
+    relationship: one_to_one
+  }
+
   join: activity_outcome_detail {
     sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
     relationship: one_to_many
   }
+
 }
 
 explore: snapshot {
@@ -46,7 +52,8 @@ explore: snapshot {
   }
   join: org {
     sql_on: ${course.org_id} = ${org.id}
-      --and ${org.parent_id} not in (500, 503, 505);;
+      --and ${org.parent_id} not in (500, 503, 505)
+      ;;
     relationship: one_to_one
     type: inner
   }

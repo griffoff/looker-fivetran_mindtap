@@ -58,22 +58,22 @@ view: activity {
 
   dimension: is_gradable {
     type: yesno
-    sql: ${TABLE}."IS_GRADABLE" ;;
+    sql: ${TABLE}."IS_GRADABLE"=1 ;;
   }
 
   dimension: is_scorable {
     type: yesno
-    sql: ${TABLE}."IS_SCORABLE" ;;
+    sql: ${TABLE}."IS_SCORABLE" =1;;
   }
 
   dimension: is_student_started {
     type: yesno
-    sql: ${TABLE}."IS_STUDENT_STARTED" ;;
+    sql: ${TABLE}."IS_STUDENT_STARTED"=1 ;;
   }
 
   dimension: is_timed {
     type: yesno
-    sql: ${TABLE}."IS_TIMED" ;;
+    sql: ${TABLE}."IS_TIMED"=1;;
   }
 
   dimension: launch_action {
@@ -88,7 +88,7 @@ view: activity {
 
   dimension: manually_graded {
     type: yesno
-    sql: ${TABLE}."MANUALLY_GRADED" ;;
+    sql: ${TABLE}."MANUALLY_GRADED"=1 ;;
   }
 
   dimension: max_score {

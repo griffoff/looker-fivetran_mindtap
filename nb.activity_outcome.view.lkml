@@ -1,3 +1,22 @@
+view: activity_outcome_latest_grade {
+  view_label: "Activity"
+  derived_table: {
+    sql: SELECT id as activity_outcome_id, max(last_score_modified_time) as latest_last_score_modified_time
+          FROM ${activity_outcome.SQL_TABLE_NAME}
+          GROUP BY 1;;
+  }
+  dimension: activity_outcome_id {
+    primary_key: yes
+    hidden: yes
+  }
+  dimension_group: latest_last_score_modified_time {
+    type: time
+    timeframes: [raw, minute, hour, year, day_of_week, week_of_year, month, month_name]
+    hidden: yes
+  }
+
+}
+
 view: activity_outcome {
   sql_table_name: mindtap.PROD_NB.ACTIVITY_OUTCOME ;;
 
@@ -90,12 +109,12 @@ view: activity_outcome {
 
   dimension: is_partial {
     type: yesno
-    sql: ${TABLE}."IS_PARTIAL" ;;
+    sql: ${TABLE}."IS_PARTIAL"=1 ;;
   }
 
   dimension: is_student {
     type: yesno
-    sql: ${TABLE}."IS_STUDENT" ;;
+    sql: ${TABLE}."IS_STUDENT"=1 ;;
   }
 
   dimension: last_modified_by {
@@ -104,14 +123,18 @@ view: activity_outcome {
     hidden: yes
   }
 
-  dimension: last_modified_date {
-    type: date_time
-    sql: to_timestamp(${TABLE}."LAST_MODIFIED_DATE", 3) ;;
+  dimension_group: last_modified_date {
+    group_label: "Last Modified"
+    type: time
+    timeframes: [raw, minute, hour, day_of_week, date, month, month_name, year]
+    sql: TO_TIMESTAMP(${TABLE}.LAST_MODIFIED_DATE, 3) ;;
   }
 
-  dimension: last_score_modified_time {
-    type: date_time
-    sql: to_timestamp(${TABLE}."LAST_SCORE_MODIFIED_TIME", 3) ;;
+  dimension_group: last_score_modified_time {
+    group_label: "Last Score Modified"
+    type: time
+    timeframes: [raw, minute, hour, year, day_of_week, week_of_year, month, month_name]
+    sql: to_timestamp(${TABLE}.LAST_SCORE_MODIFIED_TIME, 3) ;;
   }
 
   dimension: points_earned {
