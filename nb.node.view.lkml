@@ -46,9 +46,11 @@ view: node {
     sql: ${TABLE}."DISPLAY_ORDER" ;;
   }
 
-  dimension: end_date {
-    type: number
-    sql: ${TABLE}."END_DATE" ;;
+  dimension_group: end_date {
+    label: "Due"
+    type: time
+    timeframes: [raw, date, month, month_name, day_of_week, hour_of_day]
+    sql: to_timestamp(${TABLE}."END_DATE", 3) ;;
   }
 
   dimension: is_student_visible {
@@ -115,4 +117,53 @@ view: node {
     type: count
     drill_fields: [id, name]
   }
+
+  measure: cycle_time_mins {
+    type: number
+    hidden: yes
+    sql: datediff(minute, ${end_date_raw}, ${activity_outcome_latest_grade.last_score_modified_time_raw}) ;;
+  }
+
+  measure: cycle_time_max_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: MAX(${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
+  measure: cycle_time_3q_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
+  measure: cycle_time_median_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
+  measure: cycle_time_1q_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
+  measure: cycle_time_min_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: MIN(${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
+  measure: cycle_time_avg_hrs {
+    group_label: "Cycle time"
+    type: number
+    sql: AVG(${cycle_time_mins}) / 60;;
+    value_format_name: decimal_1
+  }
+
 }
