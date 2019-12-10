@@ -7,6 +7,12 @@ view: course {
     sql: ${TABLE}.ID ;;
   }
 
+  dimension: gcs_status {
+    label: "Guided Course Setup Status"
+    type: string
+    sql: ${TABLE}.GCS_STATUS ;;
+  }
+
   dimension: _fivetran_deleted {
     type: yesno
     sql: ${TABLE}._FIVETRAN_DELETED ;;
