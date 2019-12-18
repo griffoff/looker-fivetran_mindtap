@@ -176,12 +176,14 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_mins {
+    description: "Cycle Time in minutes"
     type: number
-    sql: datediff(minute, ${take_end_time_raw}, ${activity_outcome.last_score_modified_time_raw});;
+    sql: datediff(minute, ${take_end_time_raw}, CASE WHEN ${activity_outcome.last_score_modified_time_raw} < ${take_end_time_raw} THEN NULL ELSE ${activity_outcome.last_score_modified_time_raw} END);;
     hidden: yes
   }
 
   measure: cycle_time_max_hrs {
+    description: "Cycle Time (Maximum)"
     group_label: "Cycle time"
     type: number
     sql: MAX(${cycle_time_mins}) / 60;;
@@ -189,6 +191,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_3q_hrs {
+    description: "Cycle Time (1st Quartile)"
     group_label: "Cycle time"
     type: number
     sql: PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
@@ -196,7 +199,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_1q_hrs {
-    description: "Cycle Time (3rd Quartile)"
+    description: "Cycle Time (1st Quartile)"
     group_label: "Cycle time"
     type: number
     sql: PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
@@ -204,6 +207,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_median_hrs {
+    description: "Cycle Time (Median)"
     group_label: "Cycle time"
     type: number
     sql: PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
@@ -211,6 +215,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_min_hrs {
+    description: "Cycle Time (Minimum)"
     group_label: "Cycle time"
     type: number
     sql: MIN(${cycle_time_mins}) / 60;;
@@ -218,6 +223,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_avg_hrs {
+    description: "Cycle Time (Mean)"
     group_label: "Cycle time"
     type: number
     sql: AVG(${cycle_time_mins}) / 60;;
