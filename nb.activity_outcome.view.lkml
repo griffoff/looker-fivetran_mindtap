@@ -133,7 +133,7 @@ view: activity_outcome {
   dimension_group: last_score_modified_time {
     group_label: "Last Score Modified"
     type: time
-    timeframes: [raw, minute, hour, year, day_of_week, week_of_year, month, month_name]
+    timeframes: [raw, minute, hour, date, year, day_of_week, week_of_year, month, month_name]
     sql: to_timestamp(${TABLE}.LAST_SCORE_MODIFIED_TIME, 3) ;;
   }
 

@@ -177,7 +177,7 @@ view: activity_outcome_detail {
 
   measure: cycle_time_mins {
     type: number
-    sql: datediff(minute, ${take_end_time_raw}, ${activity_outcome.last_modified_date_raw});;
+    sql: datediff(minute, ${take_end_time_raw}, ${activity_outcome.last_score_modified_time_raw});;
     hidden: yes
   }
 
@@ -196,6 +196,7 @@ view: activity_outcome_detail {
   }
 
   measure: cycle_time_1q_hrs {
+    description: "Cycle Time (3rd Quartile)"
     group_label: "Cycle time"
     type: number
     sql: PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY ${cycle_time_mins}) / 60;;
