@@ -147,6 +147,16 @@ explore: snapshot {
       and ${node.id} = ${activity_outcome.activity_id};;
     relationship: one_to_many
   }
+    join: navarro_section_items {
+      sql_on: ${org.external_id} = ${navarro_section_items.course_key} ;;
+      relationship: one_to_many
+    }
+
+    join: navarro_assignments_items {
+      sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} ;;
+     relationship: one_to_many
+  }
+
 #   join: ga_data_parsed {
 #     sql_on: ${activity_outcome_detail.activity_id} = ${ga_data_parsed.activityid}
 #       and ${student.source_id} = ${ga_data_parsed.userssoguid}
