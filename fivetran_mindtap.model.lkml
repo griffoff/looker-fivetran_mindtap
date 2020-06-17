@@ -153,9 +153,11 @@ explore: snapshot {
     }
 
     join: navarro_assignments_items {
-      sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} ;;
+      sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} and ${navarro_section_items.section} = ${navarro_assignments_items.section} ;;
      relationship: one_to_many
   }
+
+
 
 #   join: ga_data_parsed {
 #     sql_on: ${activity_outcome_detail.activity_id} = ${ga_data_parsed.activityid}

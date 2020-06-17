@@ -50,6 +50,7 @@ view: navarro_section_items {
     sql: ${TABLE}."SECTION" ;;
     group_label: "Navarro"
     label: "Navarro Section"
+    hidden: yes
   }
 
   measure: count {
