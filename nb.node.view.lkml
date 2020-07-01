@@ -53,6 +53,11 @@ view: node {
     sql: to_timestamp(${TABLE}."END_DATE", 3) ;;
   }
 
+  dimension: has_an_activity_due_date{
+    type: yesno
+    sql: ${end_date_date} is not null;;
+  }
+
   dimension: is_student_visible {
     type: yesno
     sql: ${TABLE}."IS_STUDENT_VISIBLE" ;;
@@ -116,6 +121,11 @@ view: node {
   measure: count {
     type: count
     drill_fields: [id, name]
+  }
+
+  measure: count_distinct_courses {
+    type: count_distinct
+    sql: ${TABLE}."SNAPSHOT_ID" ;;
   }
 
   measure: cycle_time_mins {
