@@ -187,6 +187,17 @@ explore: app_provision {
     relationship: one_to_many
     type: inner
   }
+  join: activity {
+    sql_on: ${node.id} = ${activity.id}
+      and ${app.id} = ${activity.app_id} ;;
+    relationship: one_to_one
+  }
+  join: node {
+    sql_on: ${snapshot.id} = ${node.snapshot_id}
+        and ${activity.id} = ${node.id} ;;
+    relationship: one_to_one
+  }
+
 }
 
 explore: app_action {}
