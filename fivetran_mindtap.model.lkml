@@ -10,6 +10,7 @@ include: "//cube/dim_course.view"
 include: "//cube/raw_ga.ga_data_parsed.view"
 include: "//cube/dim_*"
 include: "//cube/fact_activation.view"
+include: "//datavault/sat/sat_coursesection.view"
 
 # include all the views
 include: "*.view"
@@ -41,15 +42,9 @@ explore: activity_outcome {
 
 }
 
-explore: snapshot {
-  extends: [node, activity_outcome]
-  sql_always_where: not ${snapshot._fivetran_deleted} ;;
-  # ${snapshot.is_master} = 0
-  join: course {
-    sql_on: ${snapshot.org_id} = ${course.org_id} ;;
-    relationship: one_to_one
-    type: inner
-  }
+explore: course {
+  extension: required
+
   join: org {
     sql_on: ${course.org_id} = ${org.id}
       --and ${org.parent_id} not in (500, 503, 505)
@@ -57,6 +52,32 @@ explore: snapshot {
     relationship: one_to_one
     type: inner
   }
+  join: dim_course {
+    sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
+    relationship: one_to_one
+  }
+  join: dim_product {
+    sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
+    relationship: many_to_one
+  }
+  join: sat_coursesection {
+    sql_on: ${org.external_id} = ${sat_coursesection.course_key}
+          and ${sat_coursesection._latest};;
+    relationship: one_to_one
+  }
+
+}
+
+explore: snapshot {
+  extends: [course, node, activity_outcome]
+  sql_always_where: not ${snapshot._fivetran_deleted} ;;
+  # ${snapshot.is_master} = 0
+  join: course {
+    sql_on: ${snapshot.org_id} = ${course.org_id} ;;
+    relationship: one_to_one
+    type: inner
+  }
+
   join: user_org_profile {
     #fields: [user_org_profile.user_count, user_org_profile.created_date]
     sql_on: ${snapshot.org_id} = ${user_org_profile.org_id};;
@@ -130,14 +151,7 @@ explore: snapshot {
     relationship: many_to_one
     type: inner
   }
-  join: dim_course {
-    sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
-    relationship: one_to_one
-  }
-  join: dim_product {
-    sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
-    relationship: many_to_one
-  }
+
   join: node {
     sql_on: ${snapshot.id} = ${node.snapshot_id};;
     relationship: one_to_many

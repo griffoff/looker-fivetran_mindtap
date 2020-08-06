@@ -5,3 +5,4 @@ project_name: "fivetran_mindtap"
 #
 local_dependency: {project: "core"}
 local_dependency: {project: "cube"}
+local_dependency: {project: "datavault"}
