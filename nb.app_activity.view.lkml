@@ -1,6 +1,6 @@
 view: app_activity {
-  sql_table_name: "PROD_NB"."APP_ACTIVITY"
-    ;;
+  sql_table_name: mindtap.prod_nb.app_activity;;
+
   drill_fields: [id]
 
   dimension: id {
