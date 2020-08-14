@@ -151,10 +151,21 @@ explore: snapshot {
     relationship: many_to_one
     type: inner
   }
-
   join: node {
     sql_on: ${snapshot.id} = ${node.snapshot_id};;
     relationship: one_to_many
+  }
+  join: activity {
+    sql_on: ${node.id} = ${activity.id} ;;
+    relationship: one_to_one
+  }
+  join: app_activity {
+    sql_on: ${activity.app_activity_id} = ${app_activity.id} ;;
+    relationship: one_to_many
+  }
+  join: app {
+    sql_on: ${app_activity.app_id} = ${app.id} ;;
+    relationship: many_to_one
   }
   join: master_node {
     from: node
@@ -176,32 +187,21 @@ explore: snapshot {
     sql_on: ${master_app_activity.app_id} = ${master_app.id} ;;
     relationship: many_to_one
   }
-
   join: activity_outcome {
     sql_on: ${students.user_id} = ${activity_outcome.user_id}
       and ${node.id} = ${activity_outcome.activity_id};;
     relationship: one_to_many
   }
-    join: navarro_section_items {
-      sql_on: ${org.external_id} = ${navarro_section_items.course_key} ;;
-      relationship: one_to_many
-    }
-
-    join: navarro_assignments_items {
-      sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} and ${navarro_section_items.section} = ${navarro_assignments_items.section} ;;
-     relationship: one_to_many
+  join: navarro_section_items {
+    sql_on: ${org.external_id} = ${navarro_section_items.course_key} ;;
+    relationship: one_to_many
   }
 
+  join: navarro_assignments_items {
+    sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} and ${navarro_section_items.section} = ${navarro_assignments_items.section} ;;
+   relationship: one_to_many
+  }
 
-
-#   join: ga_data_parsed {
-#     sql_on: ${activity_outcome_detail.activity_id} = ${ga_data_parsed.activityid}
-#       and ${student.source_id} = ${ga_data_parsed.userssoguid}
-#       and ${activity_outcome_detail.take_start_time} <= ${ga_data_parsed.hit_raw}
-#       and coalesce(${activity_outcome_detail.next_take_start_time}, '9999-12-31') > ${ga_data_parsed.hit_raw}
-#       ;;
-#     relationship: one_to_many
-#   }
 }
 
 explore: app_provision {
