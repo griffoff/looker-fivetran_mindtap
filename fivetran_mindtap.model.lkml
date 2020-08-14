@@ -161,6 +161,22 @@ explore: snapshot {
     sql_on: ${node.origin_id} = ${master_node.id};;
     relationship: many_to_one
   }
+  join: master_activity {
+    from: activity
+    sql_on: ${master_node.id} = ${master_activity.id} ;;
+    relationship: one_to_one
+  }
+  join: master_app_activity {
+    from: app_activity
+    sql_on: ${master_activity.app_activity_id} = ${master_app_activity.id} ;;
+    relationship: one_to_many
+  }
+  join: master_app {
+    from: app
+    sql_on: ${master_app_activity.app_id} = ${master_app.id} ;;
+    relationship: many_to_one
+  }
+
   join: activity_outcome {
     sql_on: ${students.user_id} = ${activity_outcome.user_id}
       and ${node.id} = ${activity_outcome.activity_id};;
