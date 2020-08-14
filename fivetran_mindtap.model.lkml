@@ -53,14 +53,17 @@ explore: course {
     type: inner
   }
   join: dim_course {
+    view_label: " * Additional Course/Section Details (Source: Legacy Cube)"
     sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
     relationship: one_to_one
   }
   join: dim_product {
+    view_label: " * Additional Product Details (Source: Legacy Cube)"
     sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
     relationship: many_to_one
   }
   join: sat_coursesection {
+    view_label: " * Additional Course/Section Details (Source: Data Vault )"
     sql_on: ${org.external_id} = ${sat_coursesection.course_key}
           and ${sat_coursesection._latest};;
     relationship: one_to_one
@@ -160,6 +163,7 @@ explore: snapshot {
     relationship: one_to_one
   }
   join: app_activity {
+    fields: []
     sql_on: ${activity.app_activity_id} = ${app_activity.id} ;;
     relationship: one_to_many
   }
@@ -179,6 +183,7 @@ explore: snapshot {
   }
   join: master_app_activity {
     from: app_activity
+    fields: []
     sql_on: ${master_activity.app_activity_id} = ${master_app_activity.id} ;;
     relationship: one_to_many
   }
@@ -193,11 +198,13 @@ explore: snapshot {
     relationship: one_to_many
   }
   join: navarro_section_items {
+    view_label: " * LOTS"
     sql_on: ${org.external_id} = ${navarro_section_items.course_key} ;;
     relationship: one_to_many
   }
 
   join: navarro_assignments_items {
+    view_label: " * LOTS"
     sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} and ${navarro_section_items.section} = ${navarro_assignments_items.section} ;;
    relationship: one_to_many
   }
@@ -236,31 +243,3 @@ explore: app_provision {
 }
 
 explore: app_action {}
-
-# explore: app_provision_old {
-#   from:  app_provision
-#   view_name: app_provision
-#   join: master {
-#     from: snapshot
-#     sql_on: ${app_provision.snapshot_id}=${master.id} ;;
-#   }
-#   join: app {
-#     sql_on: ${app_provision.app_id}=${app.id} ;;
-#     relationship: one_to_many
-#   }
-#   join: master_created_by_user {
-#     from: user
-#     sql_on: ${master.created_by}=${master_created_by_user.id} ;;
-#     relationship: many_to_one
-#   }
-#   join: snapshot {
-#     sql_on: ${snapshot.parent_id}=${master.id}
-#       and ${snapshot.is_master} = 0;;
-#     relationship: one_to_many
-#   }
-#   join: snapshot_created_by_user {
-#     from: user
-#     sql_on: ${snapshot.created_by}=${snapshot_created_by_user.id} ;;
-#     relationship: many_to_one
-#   }
-#}
