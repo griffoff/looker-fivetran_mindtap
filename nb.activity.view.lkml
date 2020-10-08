@@ -2,7 +2,6 @@ view: activity {
   sql_table_name: mindtap.PROD_NB.ACTIVITY ;;
 
   dimension: app_activity_id {
-    primary_key: yes
     type: number
     sql: ${TABLE}."APP_ACTIVITY_ID" ;;
   }
@@ -42,6 +41,7 @@ view: activity {
   }
 
   dimension: id {
+    primary_key: yes
     type: number
     sql: ${TABLE}."ID" ;;
   }
