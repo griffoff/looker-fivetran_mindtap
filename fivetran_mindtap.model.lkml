@@ -130,6 +130,7 @@ explore: snapshot {
     relationship: one_to_one
   }
   join: university {
+    view_label: "Institution"
     from: org
     sql_on: ${org.parent_id} = ${university.id} ;;
     relationship: many_to_one
@@ -196,6 +197,14 @@ explore: snapshot {
     sql_on: ${students.user_id} = ${activity_outcome.user_id}
       and ${node.id} = ${activity_outcome.activity_id};;
     relationship: one_to_many
+  }
+  join: due_date_extension {
+    from: user_node
+    sql_on: ${students.user_id} = ${due_date_extension.user_id}
+      and ${node.id} = ${due_date_extension.node_id}
+      and ${due_date_extension.end_date_raw} IS NOT NULL
+      ;;
+    relationship: one_to_one
   }
   join: navarro_section_items {
     view_label: " * LOTS"
