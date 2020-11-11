@@ -96,20 +96,20 @@ view: activity_manual_grading_duration {
   dimension: duration {
     type: number
     sql: ${TABLE}.duration / 60 / 60  / 24;;
-    value_format: "d \d\a\y\s h \h\r\s m \m\i\n\s s \s\e\c\s"
+    value_format_name: duration_hms_full
   }
 
   measure: total_duration {
     type: sum
     sql: ${duration} ;;
-    value_format: "d \d\a\y\s h \h\r\s m \m\i\n\s s \s\e\c\s"
+    value_format_name: duration_hms_full
     label: "Total Time Spent"
   }
 
   measure: average_duration_per_instructor {
     type: number
     sql: sum(${duration}) / nullif(count(distinct ${merged_guid}),0) ;;
-    value_format: "d \d\a\y\s h \h\r\s m \m\i\n\s s \s\e\c\s"
+    value_format_name: duration_hms_full
     label: "Average Time Spent Per Instructor"
 
   }
