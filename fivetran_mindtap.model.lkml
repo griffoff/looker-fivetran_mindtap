@@ -168,6 +168,13 @@ explore: snapshot {
     sql_on: ${node.id} = ${activity.id} ;;
     relationship: one_to_one
   }
+  join: activity_manual_grading_duration {
+    view_label: "Activity Grading Time Spent"
+    fields: [activity_manual_grading_duration.total_duration, activity_manual_grading_duration.average_duration_per_instructor
+            ,activity_manual_grading_duration.event_time_date,activity_manual_grading_duration.event_time_week,activity_manual_grading_duration.event_time_month,activity_manual_grading_duration.event_time_year]
+    sql_on: ${activity.id} = ${activity_manual_grading_duration.activity_id} ;;
+    relationship: one_to_many
+  }
   join: app_activity {
     fields: []
     sql_on: ${activity.app_activity_id} = ${app_activity.id} ;;
