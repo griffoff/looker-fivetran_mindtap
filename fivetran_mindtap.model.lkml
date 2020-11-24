@@ -129,6 +129,11 @@ explore: snapshot {
     sql_on: ${snapshot.id} = ${snapshot_summary.id};;
     relationship: one_to_one
   }
+  join: student_outcome_summary {
+    sql_on: ${snapshot.id} = ${student_outcome_summary.snapshot_id}
+          and ${student.id} = ${student_outcome_summary.user_id};;
+    relationship: one_to_one
+  }
   join: university {
     view_label: "Institution"
     from: org

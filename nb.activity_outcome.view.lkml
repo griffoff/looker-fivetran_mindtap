@@ -169,6 +169,12 @@ view: activity_outcome {
     sql: ${TABLE}."VERSION" ;;
   }
 
+  measure: average_attempts {
+    type: average
+    sql: NULLIF(${attempts}, 0) ;;
+    value_format_name: decimal_2
+  }
+
   measure: count {
     type: count
     drill_fields: [id, activity.app_activity_id, activity_outcome_detail.count]
