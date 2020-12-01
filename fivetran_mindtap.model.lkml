@@ -154,6 +154,19 @@ explore: snapshot {
     type: inner
     relationship: many_to_one
   }
+  join: copied_from_snapshot {
+    view_label: "Snapshot (Copied From)"
+    from: snapshot
+    sql_on: ${snapshot.source_id} = ${copied_from_snapshot.id};;
+    relationship: many_to_one
+  }
+  join: copied_from_org {
+    view_label: "Snapshot (Copied From)"
+    fields: [external_id]
+    from: org
+    sql_on: ${copied_from_snapshot.org_id} = ${copied_from_org.id} ;;
+    relationship: one_to_one
+  }
   join: master_created_by_user {
     from: user
     sql_on: ${master.created_by}=${master_created_by_user.id} ;;
