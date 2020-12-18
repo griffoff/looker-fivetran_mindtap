@@ -137,6 +137,11 @@ explore: snapshot {
     sql_on: ${snapshot.id} = ${snapshot_summary.id};;
     relationship: one_to_one
   }
+  join: student_outcome_summary {
+    sql_on: ${snapshot.id} = ${student_outcome_summary.snapshot_id}
+          and ${student.id} = ${student_outcome_summary.user_id};;
+    relationship: one_to_one
+  }
   join: university {
     view_label: "Institution"
     from: org
@@ -156,6 +161,19 @@ explore: snapshot {
       and ${master.is_master} = 1;;
     type: inner
     relationship: many_to_one
+  }
+  join: copied_from_snapshot {
+    view_label: "Snapshot (Copied From)"
+    from: snapshot
+    sql_on: ${snapshot.source_id} = ${copied_from_snapshot.id};;
+    relationship: many_to_one
+  }
+  join: copied_from_org {
+    view_label: "Snapshot (Copied From)"
+    fields: [external_id]
+    from: org
+    sql_on: ${copied_from_snapshot.org_id} = ${copied_from_org.id} ;;
+    relationship: one_to_one
   }
   join: master_created_by_user {
     from: user
