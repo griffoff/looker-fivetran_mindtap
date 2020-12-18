@@ -11,6 +11,7 @@ include: "//cube/raw_ga.ga_data_parsed.view"
 include: "//cube/dim_*"
 include: "//cube/fact_activation.view"
 include: "//datavault/sat/sat_coursesection.view"
+include: "//cengage_unlimited/views/cu_user_analysis/custom_course_key_cohort_filter.view"
 
 # include all the views
 include: "*.view"
@@ -67,6 +68,13 @@ explore: course {
     sql_on: ${org.external_id} = ${sat_coursesection.course_key}
           and ${sat_coursesection._latest};;
     relationship: one_to_one
+  }
+
+  join: custom_course_key_cohort_filter {
+    view_label: "* Custom Course Key Cohort Filter *"
+    sql_on: ${org.external_id} = ${custom_course_key_cohort_filter.course_key} ;;
+    # type: left_outer
+    relationship: one_to_many
   }
 
 }
