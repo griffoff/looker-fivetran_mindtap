@@ -137,6 +137,11 @@ view: activity_outcome_detail {
     sql: to_timestamp(${TABLE}.TAKE_END_TIME, 3) ;;
   }
 
+  measure: maximum_timestamp {
+    sql: convert_timezone('EST',MAX(${take_end_time_raw})) ;;
+    html: {{ rendered_value | date: "%Y/%d/%m %H:%M:%S" }} ;;
+  }
+
   dimension: take_id {
     type: string
     sql: ${TABLE}."TAKE_ID" ;;

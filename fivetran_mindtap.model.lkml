@@ -119,6 +119,14 @@ explore: snapshot {
     relationship: one_to_one
     type: inner
   }
+
+  join: lms_user_info {
+    from: lms_user_info
+    sql_on: ${user.source_id} = ${lms_user_info.uid};;
+    relationship:  one_to_many
+    type:  left_outer
+  }
+
   join: instructors {
     from:  user_org_profile
     fields: []
@@ -251,6 +259,11 @@ explore: snapshot {
    relationship: one_to_many
   }
 
+  join: ichs_assignments_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${ichs_assignments_items.assignment} ;;
+    relationship: one_to_many
+    }
 }
 
 explore: app_provision {
