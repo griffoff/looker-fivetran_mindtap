@@ -264,6 +264,12 @@ explore: snapshot {
     sql_on: ${node.name} = ${ichs_assignments_items.assignment} ;;
     relationship: one_to_many
     }
+
+  join: liberty_bio_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${liberty_bio_items.assignment} ;;
+    relationship: one_to_many
+  }
 }
 
 explore: app_provision {
