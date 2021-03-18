@@ -270,6 +270,12 @@ explore: snapshot {
     sql_on: ${node.name} = ${liberty_bio_items.assignment} ;;
     relationship: one_to_many
   }
+
+  join: rcc_assignment_level_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${rcc_assignment_level_items.assignment} ;;
+    relationship: one_to_many
+  }
 }
 
 explore: app_provision {
