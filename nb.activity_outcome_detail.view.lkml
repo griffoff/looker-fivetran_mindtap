@@ -36,6 +36,7 @@ view: activity_outcome_detail_ext {
 
   dimension: is_latest_take {
     type: yesno
+    alias: [latest_attempt]
   }
 
   dimension: next_take_start_time {
