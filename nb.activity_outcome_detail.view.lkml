@@ -1,8 +1,25 @@
-view: activity_outcome_detail {
+include: "./nb.activity_outcome.view"
+
+explore: activity_outcome_detail {
+  hidden:yes
+
+  join: activity_outcome_detail_ext {
+    sql_on: ${activity_outcome_detail.id} = ${activity_outcome_detail_ext.id} ;;
+    relationship: one_to_one
+  }
+
+  join: activity_outcome {
+    sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
+    relationship: many_to_one
+  }
+}
+
+view: activity_outcome_detail_ext {
+  view_label: "Activity Outcome Detail"
   derived_table: {
     sql:
-      select
-        *
+     select
+        activity_outcome_detail_id
         ,lead(take_start_time) over (partition by activity_id, user_id order by take_start_time) as next_take_start_time
         ,lead(id) over (partition by activity_outcome_id order by id) is null as is_latest_take
       from mindtap.PROD_NB.ACTIVITY_OUTCOME_DETAIL
@@ -10,7 +27,27 @@ view: activity_outcome_detail {
 
     persist_for: "24 hours"
   }
-  #sql_table_name: PROD_NB.ACTIVITY_OUTCOME_DETAIL ;;
+
+  dimension: id {
+    hidden: yes
+    primary_key: yes
+    type:number
+  }
+
+  dimension: is_latest_take {
+    type: yesno
+  }
+
+  dimension: next_take_start_time {
+    type: date_time
+    sql: to_timestamp(${TABLE}."NEXT_TAKE_START_TIME", 3) ;;
+  }
+
+}
+
+view: activity_outcome_detail {
+  view_label: "Activity Outcome Detail"
+  sql_table_name: PROD_NB.ACTIVITY_OUTCOME_DETAIL ;;
 
   dimension: id {
     primary_key: yes
@@ -21,10 +58,6 @@ view: activity_outcome_detail {
   dimension: _fivetran_deleted {
     type: yesno
     sql: ${TABLE}."_FIVETRAN_DELETED" ;;
-  }
-
-  dimension: is_latest_take {
-    type: yesno
   }
 
   dimension_group: _fivetran_synced {
@@ -157,11 +190,6 @@ view: activity_outcome_detail {
     type: time
     timeframes: [raw, minute, hour, day_of_week, date, month, month_name, year]
     sql: to_timestamp(${TABLE}.TAKE_START_TIME, 3) ;;
-  }
-
-  dimension: next_take_start_time {
-    type: date_time
-    sql: to_timestamp(${TABLE}."NEXT_TAKE_START_TIME", 3) ;;
   }
 
   dimension: user_id {

@@ -29,6 +29,7 @@ explore: node {
 }
 
 explore: activity_outcome {
+  extends: [activity_outcome_detail]
   extension: required
 
   join: activity_outcome_latest_grade {
