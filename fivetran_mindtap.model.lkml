@@ -25,6 +25,7 @@ explore: node {
 }
 
 explore: activity_outcome {
+  extends: [activity_outcome_detail]
   extension: required
 
   join: activity_outcome_latest_grade {
@@ -282,6 +283,12 @@ explore: snapshot {
   join: liberty_bio_items {
     view_label: " * LOTS"
     sql_on: ${node.name} = ${liberty_bio_items.assignment} ;;
+    relationship: one_to_many
+  }
+
+  join: rcc_assignment_level_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${rcc_assignment_level_items.assignment} ;;
     relationship: one_to_many
   }
 }
