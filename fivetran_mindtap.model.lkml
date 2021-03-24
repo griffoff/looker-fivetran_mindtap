@@ -4,14 +4,10 @@ include: "//core/fivetran.view"
 # connection: "snowflake_mindtap"
 connection: "snowflake_prod"
 label: "MindTap source data"
-include: "//cube/dim_date.view"
-include: "//cube/dim_product.view"
-include: "//cube/dim_course.view"
-include: "//cube/raw_ga.ga_data_parsed.view"
-include: "//cube/dim_*"
-include: "//cube/fact_activation.view"
+
 include: "//datavault/sat/sat_coursesection.view"
 include: "//cengage_unlimited/views/cu_user_analysis/custom_course_key_cohort_filter.view"
+include: "//cengage_unlimited/views/cu_user_analysis/course_section_usage_facts.view"
 
 # include all the views
 include: "*.view"
@@ -44,7 +40,16 @@ explore: activity_outcome {
 }
 
 explore: course {
+  from: course
+  view_name: course
+
+  extends: [course_info]
   extension: required
+
+  join: course_info {
+    sql_on: ${org.external_id} = ${course_info.course_identifier} ;;
+    relationship: one_to_one
+  }
 
   join: org {
     sql_on: ${course.org_id} = ${org.id}
@@ -53,16 +58,16 @@ explore: course {
     relationship: one_to_one
     type: inner
   }
-  join: dim_course {
-    view_label: " * Additional Course/Section Details (Source: Legacy Cube)"
-    sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
-    relationship: one_to_one
-  }
-  join: dim_product {
-    view_label: " * Additional Product Details (Source: Legacy Cube)"
-    sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
-    relationship: many_to_one
-  }
+  # join: dim_course {
+  #   view_label: " * Additional Course/Section Details (Source: Legacy Cube)"
+  #   sql_on: ${org.external_id} = ${dim_course.coursekey} ;;
+  #   relationship: one_to_one
+  # }
+  # join: dim_product {
+  #   view_label: " * Additional Product Details (Source: Legacy Cube)"
+  #   sql_on: ${dim_course.productid} = ${dim_product.productid} ;;
+  #   relationship: many_to_one
+  # }
   join: sat_coursesection {
     view_label: " * Additional Course/Section Details (Source: Data Vault )"
     sql_on: ${org.external_id} = ${sat_coursesection.course_key}
@@ -70,16 +75,25 @@ explore: course {
     relationship: one_to_one
   }
 
-  join: custom_course_key_cohort_filter {
-    view_label: "* Custom Course Key Cohort Filter *"
-    sql_on: ${org.external_id} = ${custom_course_key_cohort_filter.course_key} ;;
-    # type: left_outer
-    relationship: one_to_many
-  }
+  # join: custom_course_key_cohort_filter {
+  #   view_label: "* Custom Course Key Cohort Filter *"
+  #   sql_on: ${org.external_id} = ${custom_course_key_cohort_filter.course_key} ;;
+  #   relationship: one_to_many
+  # }
+
+  # join: course_section_usage_facts {
+  #   view_label: " * Additional Course/Section Usage Facts (Source: All Events / User Products )"
+  #   sql_on: ${org.external_id} = ${course_section_usage_facts.course_key} ;;
+  #   relationship: one_to_one
+  # }
 
 }
 
 explore: snapshot {
+  from: snapshot
+  view_name: snapshot
+
+  hidden: no
   extends: [course, node, activity_outcome]
   sql_always_where: not ${snapshot._fivetran_deleted} ;;
   # ${snapshot.is_master} = 0
@@ -273,6 +287,9 @@ explore: snapshot {
 }
 
 explore: app_provision {
+  from: app_provision
+  view_name: app_provision
+
   extends: [snapshot]
   label: "Apps"
   join: master {

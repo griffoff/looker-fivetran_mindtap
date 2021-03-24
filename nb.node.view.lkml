@@ -176,4 +176,9 @@ view: node {
     value_format_name: decimal_1
   }
 
+  measure: student_visible_content_nodes {
+    type: count_distinct
+    sql: case when ${is_student_visible} and ${node_type} not in ('com.cengage.nextbook.NextBook','com.cengage.nextbook.learningpath.LearningPath') then ${id} end ;;
+  }
+
 }
