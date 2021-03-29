@@ -1,20 +1,21 @@
-view: activity_outcome_latest_grade {
-  view_label: "Activity"
-  derived_table: {
-    sql: SELECT id as activity_outcome_id, to_timestamp(max(last_score_modified_time), 3) as last_score_modified_time
-          FROM ${activity_outcome.SQL_TABLE_NAME}
-          GROUP BY 1;;
-  }
-  dimension: activity_outcome_id {
-    primary_key: yes
-    hidden: yes
-  }
-  dimension_group: last_score_modified_time {
-    type: time
-    timeframes: [raw, minute, hour, year, day_of_week, week_of_year, month, month_name]
-    hidden: yes
-  }
+include: "nb.activity_outcome_detail.view"
+include: "activity_outcome_latest_grade.view"
 
+explore: activity_outcome {
+  hidden: yes
+  from: activity_outcome
+  view_name: activity_outcome
+  extends: [activity_outcome_detail]
+  #extension: required
+  join: activity_outcome_latest_grade {
+    view_label: "Activity"
+    sql_on: ${activity_outcome.id} = ${activity_outcome_latest_grade.activity_outcome_id} ;;
+    relationship: one_to_one
+  }
+  join: activity_outcome_detail {
+    sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
+    relationship: one_to_many
+  }
 }
 
 view: activity_outcome {

@@ -1,3 +1,17 @@
+explore: org {
+  hidden: yes
+  from: org
+  view_name: org
+
+  join: university {
+    view_label: "Institution"
+    from: org
+    sql_on: ${org.parent_id} = ${university.id} ;;
+    relationship: many_to_one
+    type: inner
+  }
+}
+
 view: org {
   sql_table_name: mindtap.PROD_NB.ORG ;;
 

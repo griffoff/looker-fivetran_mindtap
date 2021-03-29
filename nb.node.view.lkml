@@ -1,3 +1,31 @@
+include:"nb.activity.view"
+
+explore: node {
+  extends: [activity, master_activity]
+  hidden: yes
+  from: node
+  view_name: node
+
+  # extension: required
+  join: activity {
+    sql_on: ${node.id} = ${activity.id} ;;
+    relationship: one_to_one
+  }
+
+  join: master_node {
+    from: node
+    sql_on: ${node.origin_id} = ${master_node.id} ;;
+    relationship: many_to_one
+  }
+
+  join: master_activity {
+    from: activity
+    sql_on: ${master_node.id} = ${master_activity.id} ;;
+    relationship: one_to_one
+  }
+
+}
+
 view: node {
   sql_table_name: mindtap.PROD_NB.NODE ;;
 
@@ -131,7 +159,7 @@ view: node {
   measure: cycle_time_mins {
     type: number
     hidden: yes
-    sql: datediff(minute, ${end_date_raw}, ${activity_outcome_latest_grade.last_score_modified_time_raw}) ;;
+    sql: datediff(minute, ${end_date_raw}, activity_outcome_latest_grade.last_score_modified_time_raw) ;;
   }
 
   measure: cycle_time_max_hrs {

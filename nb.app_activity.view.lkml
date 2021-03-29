@@ -1,3 +1,28 @@
+include: "nb.app.view"
+
+explore: app_activity {
+  hidden: yes
+  from: app_activity
+  view_name: app_activity
+
+  join: app {
+    sql_on: ${app_activity.app_id} = ${app.id} ;;
+    relationship: many_to_one
+  }
+}
+
+explore: master_app_activity {
+  from: app_activity
+  view_name: master_app_activity
+  hidden: yes
+
+  join: master_app {
+    from: app
+    sql_on: ${master_app_activity.app_id} = ${master_app.id} ;;
+    relationship: many_to_one
+  }
+}
+
 view: app_activity {
   sql_table_name: mindtap.prod_nb.app_activity;;
 

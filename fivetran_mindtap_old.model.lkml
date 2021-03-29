@@ -10,7 +10,7 @@ connection: "snowflake_mindtap"
 # include: "//cengage_unlimited/views/cu_user_analysis/course_section_usage_facts.view"
 
 # # include all the views
-# include: "*.view"
+# include: "nb.*.view"
 
 
 # explore: fivetran_audit{}

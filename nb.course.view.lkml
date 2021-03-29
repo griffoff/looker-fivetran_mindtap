@@ -1,3 +1,9 @@
+explore: course {
+  hidden: yes
+  view_name: course
+  from: course
+}
+
 view: course {
   sql_table_name: mindtap.PROD_NB.COURSE ;;
 

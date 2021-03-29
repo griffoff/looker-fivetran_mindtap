@@ -1,4 +1,4 @@
-include: "./nb.activity_outcome.view"
+#include: "./nb.activity_outcome.view"
 
 explore: activity_outcome_detail {
   hidden:yes
@@ -8,10 +8,10 @@ explore: activity_outcome_detail {
     relationship: one_to_one
   }
 
-  join: activity_outcome {
-    sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
-    relationship: many_to_one
-  }
+  # join: activity_outcome {
+  #   sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
+  #   relationship: many_to_one
+  # }
 }
 
 view: activity_outcome_detail_ext {
@@ -48,7 +48,7 @@ view: activity_outcome_detail_ext {
 
 view: activity_outcome_detail {
   view_label: "Activity Outcome Detail"
-  sql_table_name: PROD_NB.ACTIVITY_OUTCOME_DETAIL ;;
+  sql_table_name: mindtap.prod_nb.activity_outcome_detail ;;
 
   dimension: id {
     primary_key: yes
@@ -212,7 +212,7 @@ view: activity_outcome_detail {
   measure: cycle_time_mins {
     description: "Cycle Time in minutes"
     type: number
-    sql: datediff(minute, ${take_end_time_raw}, CASE WHEN ${activity_outcome.last_score_modified_time_raw} < ${take_end_time_raw} THEN NULL ELSE ${activity_outcome.last_score_modified_time_raw} END);;
+    sql: datediff(minute, ${take_end_time_raw}, CASE WHEN activity_outcome.last_score_modified_time < ${take_end_time_raw} THEN NULL ELSE activity_outcome.last_score_modified_time END);;
     hidden: yes
   }
 
