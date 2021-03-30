@@ -109,18 +109,21 @@ view: student_outcome_summary {
     group_label: "Score"
     type: average
     sql: ${score} ;;
+    value_format_name: percent_1
   }
 
   measure: min_score {
     group_label: "Score"
     type: min
     sql: ${score} ;;
+    value_format_name: percent_1
   }
 
   measure: max_score {
     group_label: "Score"
     type: max
     sql: ${score} ;;
+    value_format_name: percent_1
   }
   # measure: score_p10 {
   #   group_label: "Score"
