@@ -183,31 +183,31 @@ view: activity_outcome {
 
   dimension: activity_completed {
     hidden: yes
-    sql: CASE WHEN ${attempts} > 0 THEN 1 END  ;;
+    sql: CASE WHEN ${attempts} > 0 THEN ${activity_id} END  ;;
   }
 
   measure: practice_activities_completed_count {
     label: "# Practice activities completed"
     type: number
-    sql: COUNT(CASE WHEN ${activity.is_scorable} AND NOT ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
+    sql: COUNT(DISTINCT CASE WHEN ${activity.is_scorable} AND NOT ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
   }
 
   measure: graded_activities_completed_count {
     label: "# Graded activities completed"
     type: number
-    sql: COUNT(CASE WHEN ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
+    sql: COUNT(DISTINCT CASE WHEN ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
   }
 
   measure: other_activities_completed_count {
     label: "# Other activities completed"
     type: number
-    sql: COUNT(CASE WHEN NOT ${activity.is_scorable} THEN ${activity_outcome.activity_completed} END);;
+    sql: COUNT(DISTINCT CASE WHEN NOT ${activity.is_scorable} THEN ${activity_outcome.activity_completed} END);;
   }
 
   measure: total_activities_completed_count {
     label: "# Total activities completed"
     type: number
-    sql: COUNT(${activity_outcome.activity_completed});;
+    sql: COUNT(DISTINCT ${activity_outcome.activity_completed});;
   }
 
   measure: count {

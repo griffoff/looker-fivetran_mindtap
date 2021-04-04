@@ -75,7 +75,8 @@ explore: snapshot_base {
     from:  user_org_profile
     fields: []
     sql_on: ${snapshot.org_id} = ${instructors.org_id}
-      and ${instructors.role_id} = 1003;;
+      and ${instructors.role_id} = 1003
+      and ${user_org_profile.id} = ${instructors.id};;
     relationship: one_to_many
     type: inner
   }
@@ -90,7 +91,8 @@ explore: snapshot_base {
     from:  user_org_profile
     fields: [students.user_count, students.randomizer]
     sql_on: ${snapshot.org_id} = ${students.org_id}
-      and ${students.role_id} = 1004;;
+      and ${students.role_id} = 1004
+      and ${user_org_profile.id} = ${students.id};;
     relationship: one_to_many
     type: inner
   }
