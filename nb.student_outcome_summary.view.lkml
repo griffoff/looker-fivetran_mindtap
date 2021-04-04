@@ -1,3 +1,5 @@
+explore: student_outcome_summary {hidden:yes}
+
 view: student_outcome_summary {
   sql_table_name: MINDTAP."PROD_NB"."STUDENT_OUTCOME_SUMMARY"
     ;;
@@ -58,14 +60,14 @@ view: student_outcome_summary {
     sql: ${TABLE}."LAST_MODIFIED_BY" ;;
   }
 
-  dimension: last_modified_date {
-    type: number
-    sql: ${TABLE}."LAST_MODIFIED_DATE" ;;
+  dimension_group: last_modified {
+    type: time
+    sql: TO_TIMESTAMP(${TABLE}."LAST_MODIFIED_DATE", 3) ;;
   }
 
-  dimension: last_score_modified_time {
-    type: number
-    sql: ${TABLE}."LAST_SCORE_MODIFIED_TIME" ;;
+  dimension_group: last_score_modified {
+    type: time
+    sql: TO_TIMESTAMP(${TABLE}."LAST_SCORE_MODIFIED_TIME", 3) ;;
   }
 
   dimension: points_earned {
@@ -109,6 +111,20 @@ view: student_outcome_summary {
     group_label: "Score"
     type: average
     sql: ${score} ;;
+    value_format_name: percent_1
+  }
+
+  measure: median_score {
+    group_label: "Score"
+    type: median
+    sql: ${score} ;;
+    value_format_name: percent_1
+  }
+
+  measure: any_score {
+    group_label: "Score"
+    type: number
+    sql: ANY_VALUE(${score}) ;;
     value_format_name: percent_1
   }
 

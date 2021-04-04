@@ -1,7 +1,7 @@
 view: user_org_profile {
   derived_table: {
     sql:
-      select *
+      select *, uniform(0::FLOAT, 1::FLOAT, random()) as randomizer
       from mindtap.PROD_NB.USER_ORG_PROFILE
       where ORG_ID != 501;;
   }
@@ -21,6 +21,10 @@ view: user_org_profile {
   dimension: _fivetran_synced {
     type: string
     sql: ${TABLE}._FIVETRAN_SYNCED ;;
+  }
+
+  dimension: randomizer {
+    type: number
   }
 
   dimension: created_by {

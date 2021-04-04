@@ -47,6 +47,7 @@ explore: master_activity {
     sql_on: ${master_activity.app_activity_id} = ${master_app_activity.id} ;;
     relationship: one_to_many
   }
+
 }
 
 view: activity {

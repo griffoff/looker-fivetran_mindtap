@@ -1,4 +1,5 @@
 include: "nb.activity_outcome_detail.view"
+include: "nb.activity.view"
 include: "activity_outcome_latest_grade.view"
 
 explore: activity_outcome {
@@ -15,6 +16,10 @@ explore: activity_outcome {
   join: activity_outcome_detail {
     sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
     relationship: one_to_many
+  }
+  join: activity {
+    sql_on: ${activity_outcome.activity_id} = ${activity.id} ;;
+    relationship: many_to_one
   }
 }
 
@@ -174,6 +179,35 @@ view: activity_outcome {
     type: average
     sql: NULLIF(${attempts}, 0) ;;
     value_format_name: decimal_2
+  }
+
+  dimension: activity_completed {
+    hidden: yes
+    sql: CASE WHEN ${attempts} > 0 THEN 1 END  ;;
+  }
+
+  measure: practice_activities_completed_count {
+    label: "# Practice activities completed"
+    type: number
+    sql: COUNT(CASE WHEN ${activity.is_scorable} AND NOT ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
+  }
+
+  measure: graded_activities_completed_count {
+    label: "# Graded activities completed"
+    type: number
+    sql: COUNT(CASE WHEN ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
+  }
+
+  measure: other_activities_completed_count {
+    label: "# Other activities completed"
+    type: number
+    sql: COUNT(CASE WHEN NOT ${activity.is_scorable} THEN ${activity_outcome.activity_completed} END);;
+  }
+
+  measure: total_activities_completed_count {
+    label: "# Total activities completed"
+    type: number
+    sql: COUNT(${activity_outcome.activity_completed});;
   }
 
   measure: count {

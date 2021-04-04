@@ -88,7 +88,7 @@ explore: snapshot_base {
 
   join: students {
     from:  user_org_profile
-    fields: [students.user_count]
+    fields: [students.user_count, students.randomizer]
     sql_on: ${snapshot.org_id} = ${students.org_id}
       and ${students.role_id} = 1004;;
     relationship: one_to_many
