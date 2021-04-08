@@ -1,3 +1,5 @@
+include: "//core/named_formats.lkml"
+
 explore: activity_manual_grading_duration {hidden:yes}
 view: activity_manual_grading_duration {
   derived_table: {
