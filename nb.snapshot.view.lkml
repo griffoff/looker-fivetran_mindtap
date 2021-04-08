@@ -5,10 +5,11 @@ include: "nb.student_outcome_summary.view"
 include: "nb.user_org_profile.view"
 include: "lms_user_info.view"
 
-explore: snapshot_base {
+explore: snapshot {
   hidden: yes
   from: snapshot
   view_name: snapshot
+  view_label: "Snapshot"
 
   join: snapshot_summary {
     sql_on: ${snapshot.id} = ${snapshot_summary.id};;
@@ -356,7 +357,7 @@ view: snapshot {
 view: snapshot_summary {
   view_label: "Snapshot"
   derived_table: {
-    explore_source: snapshot_base {
+    explore_source: snapshot {
       column: lms_integrations { field: snapshot.lms_integrations }
       column: student_count { field: students.user_count }
       column: id { field: snapshot.id }

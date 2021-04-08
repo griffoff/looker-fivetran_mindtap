@@ -50,6 +50,37 @@ explore: master_activity {
 
 }
 
+view: +activity {
+
+  dimension: ctg {
+    label: "Counts towards Grade"
+    type: yesno
+    sql: ${is_scorable} AND ${is_gradable} ;;
+  }
+
+  dimension: practice {
+    type: yesno
+    sql: ${is_scorable} AND NOT ${is_gradable} ;;
+  }
+
+  dimension: gradability {
+    type: string
+    case: {
+      when: {sql: ${is_scorable} AND ${is_gradable};; label: "Counts towards grade"}
+      when: {sql: ${is_scorable};; label: "Practice"}
+      else: "Instructional/No score"
+    }
+    html:
+    {% if value == "Counts towards grade" %}
+    <p style="background-color: orange;font-size:80%">{{ rendered_value }}</p>
+    {% elsif value == "Practice" %}
+    <p style="background-color: silver;font-size:80%">{{ rendered_value }}</p>
+    {% else %}
+    <p style="font-size:80%">{{ rendered_value }}</p>
+    {% endif %};;
+  }
+}
+
 view: activity {
   sql_table_name: mindtap.PROD_NB.ACTIVITY ;;
 
