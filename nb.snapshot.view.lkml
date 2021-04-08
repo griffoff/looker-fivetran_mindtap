@@ -11,6 +11,11 @@ explore: snapshot {
   view_name: snapshot
   view_label: "Snapshot"
 
+  join: org {
+    sql_on: ${snapshot.org_id} = ${org.id} ;;
+    relationship: one_to_one
+  }
+
   join: snapshot_summary {
     sql_on: ${snapshot.id} = ${snapshot_summary.id};;
     relationship: one_to_one
