@@ -1,10 +1,16 @@
 include:"nb.activity.view"
+include:"node_order.view"
 
 explore: node {
   extends: [activity, master_activity]
   hidden: yes
   from: node
   view_name: node
+
+  join: node_order {
+    sql_on: ${node.id} = ${node_order.node_id} ;;
+    relationship: one_to_one
+  }
 
   # extension: required
   join: activity {
@@ -13,9 +19,14 @@ explore: node {
   }
 
   join: master_node {
-    from: node
     sql_on: ${node.origin_id} = ${master_node.id} ;;
     relationship: many_to_one
+  }
+
+  join: master_node_order {
+    from: node_order
+    sql_on: ${master_node.id} = ${master_node_order.node_id} ;;
+    relationship: one_to_one
   }
 
   join: master_activity {
@@ -24,6 +35,20 @@ explore: node {
     relationship: one_to_one
   }
 
+}
+
+view: master_node {
+  extends: [node]
+  dimension: name {
+    order_by_field: master_node_order.full_order
+  }
+}
+
+view: +node {
+  final: yes
+  dimension: name {
+    order_by_field: node_order.full_order
+  }
 }
 
 view: node {
