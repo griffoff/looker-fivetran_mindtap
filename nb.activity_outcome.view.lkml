@@ -93,7 +93,7 @@ view: activity_outcome {
 
   dimension: effective_score {
     type: number
-    sql: ${points_earned}/nullif(${points_possible},0) ;;
+    sql: LEAST(NULLIF(${points_earned}, -1)/nullif(${points_possible},0), 1) ;;
     #sql: ${TABLE}."EFFECTIVE_SCORE"/100 ;;
     value_format_name: percent_1
   }
@@ -173,6 +173,53 @@ view: activity_outcome {
   dimension: version {
     type: number
     sql: ${TABLE}."VERSION" ;;
+  }
+
+  measure: activity_score_average {
+    group_label: "Score"
+    type: average
+    sql: ${effective_score};;
+    value_format_name: percent_1
+  }
+
+  measure: activity_score_p10 {
+    label: "Score (10th percentile)"
+    group_label: "Score"
+    type: number
+    sql: APPROX_PERCENTILE(${effective_score}, 0.1);;
+    value_format_name: percent_1
+  }
+
+  measure: activity_score_p25 {
+    label: "Score (25th percentile)"
+    group_label: "Score"
+    type: number
+    sql: APPROX_PERCENTILE(${effective_score}, 0.25);;
+    value_format_name: percent_1
+  }
+
+  measure: activity_score_p50 {
+    label: "Score (50th percentile)"
+    group_label: "Score"
+    type: number
+    sql: APPROX_PERCENTILE(${effective_score}, 0.5);;
+    value_format_name: percent_1
+  }
+
+  measure: activity_score_p75 {
+    label: "Score (75th percentile)"
+    group_label: "Score"
+    type: number
+    sql: APPROX_PERCENTILE(${effective_score}, 0.75);;
+    value_format_name: percent_1
+  }
+
+  measure: activity_score_p90 {
+    label: "Score (90th percentile)"
+    group_label: "Score"
+    type: number
+    sql: APPROX_PERCENTILE(${effective_score}, 0.9);;
+    value_format_name: percent_1
   }
 
   measure: average_attempts {
