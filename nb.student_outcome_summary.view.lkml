@@ -101,6 +101,14 @@ view: student_outcome_summary {
     value_format_name: percent_1
   }
 
+  dimension: score_buckets {
+    type: tier
+    style: relational
+    tiers: [0.5, 0.7, 0.9, 0.95]
+    sql: ${score} ;;
+    value_format_name: percent_0
+  }
+
   dimension: score_vs_class_average  {
     type: number
     sql: (${points_earned} / NULLIF(${class_average}, 0)) - 1 ;;

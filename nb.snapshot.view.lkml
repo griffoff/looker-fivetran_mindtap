@@ -4,6 +4,8 @@ include: "nb.org.view"
 include: "nb.student_outcome_summary.view"
 include: "nb.user_org_profile.view"
 include: "lms_user_info.view"
+include: "student_activity_sequence.view"
+include: "student_activity_graph.view"
 
 explore: snapshot {
   hidden: yes
@@ -113,6 +115,18 @@ explore: snapshot {
   join: student_outcome_summary {
     sql_on: ${snapshot.id} = ${student_outcome_summary.snapshot_id}
       and ${student.id} = ${student_outcome_summary.user_id};;
+    relationship: one_to_one
+  }
+
+  join: student_activity_graph {
+    sql_on: ${snapshot.id} = ${student_activity_graph.snapshot_id}
+      and ${student.id} = ${student_activity_graph.user_id};;
+    relationship: one_to_one
+  }
+
+  join: student_activity_sequence {
+    sql_on: ${snapshot.id} = ${student_activity_sequence.snapshot_id}
+    and ${student.id} = ${student_activity_sequence.user_id};;
     relationship: one_to_one
   }
 }
