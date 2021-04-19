@@ -11,20 +11,19 @@ explore: student_activity_graph {
 
 view: student_activity_graph {
   derived_table: {
+    publish_as_db_view: yes
     sql:
-      WITH take_start AS (
-        SELECT activity_outcome_id
-          ,MIN(take_start_time) AS first_take_start
-          ,MAX(take_start_time) AS last_take_start
-        FROM ${activity_outcome_detail.SQL_TABLE_NAME}
-        GROUP BY 1
-      )
       SELECT
         ao.user_id
         ,ao.snapshot_id
         ,ao.activity_id
         ,aod.take_start_time
-        ,node.name AS activity_name
+        ,COALESCE(master_node.name, node.name) AS activity_name
+        ,CASE
+          WHEN master_activity.is_gradable=1 THEN 'CTG'
+          WHEN master_activity.is_scorable=1 THEN 'Practice'
+          ELSE 'Instructional'
+          END AS master_activity_category
         ,CASE
           WHEN activity.is_gradable=1 THEN 'CTG'
           WHEN activity.is_scorable=1 THEN 'Practice'
@@ -32,7 +31,10 @@ view: student_activity_graph {
           END AS activity_category
         ,LEAD(activity_name) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY aod.take_start_time) as next_activity_name
         ,LEAD(activity_category) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY aod.take_start_time) as next_activity_category
+        ,LEAD(master_activity_category) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY aod.take_start_time) as next_master_activity_category
       FROM ${node.SQL_TABLE_NAME} node
+      LEFT JOIN ${node.SQL_TABLE_NAME} master_node ON node.origin_id = master_node.id
+      LEFT JOIN ${activity.SQL_TABLE_NAME} master_activity ON master_node.id = master_activity.id
       JOIN ${activity.SQL_TABLE_NAME} activity ON node.id = activity.id
       JOIN ${activity_outcome.SQL_TABLE_NAME} ao ON activity.id = ao.activity_id
       JOIN ${activity_outcome_detail.SQL_TABLE_NAME} aod ON ao.id = aod.activity_outcome_id
@@ -45,7 +47,9 @@ view: student_activity_graph {
     dimension: snapshot_id {}
     dimension: activity_id {}
     dimension: activity_category {}
+    dimension: master_activity_category {}
     dimension: next_activity_category {}
+    dimension: next_master_activity_category {}
     dimension: activity_name {}
     dimension: next_activity_name {}
 
