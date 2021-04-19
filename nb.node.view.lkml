@@ -1,7 +1,9 @@
 include:"nb.activity.view"
 include:"node_order.view"
+include:"node_chapter.view"
 
 explore: node {
+  view_label: "Node"
   extends: [activity, master_activity]
   hidden: yes
   from: node
@@ -9,6 +11,12 @@ explore: node {
 
   join: node_order {
     sql_on: ${node.id} = ${node_order.node_id} ;;
+    relationship: one_to_one
+  }
+
+  join: node_chapter {
+    view_label: "Node"
+    sql_on: ${node.origin_id} = ${node_chapter.master_node_id} ;;
     relationship: one_to_one
   }
 

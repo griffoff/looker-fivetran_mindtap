@@ -1,5 +1,11 @@
 include: "//core/datagroups.lkml"
 
+explore: node_order {
+  hidden: yes
+  from: node_order
+  view_name: node_order
+}
+
 view: node_order {
 
   derived_table: {
