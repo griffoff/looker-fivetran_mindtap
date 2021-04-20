@@ -32,7 +32,7 @@ view: student_activity_graph {
           END AS activity_category
         ,LEAD(activity_name) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY ao.last_modified_date) as next_activity_name
         ,LEAD(activity_category) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY ao.last_modified_date) as next_activity_category
-        ,LEAD(activity_category) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY ao.last_modified_date) as next_activity_type_name
+        ,LEAD(activity_type_name) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY ao.last_modified_date) as next_activity_type_name
         ,LEAD(master_activity_category) OVER (PARTITION BY ao.snapshot_id, ao.user_id ORDER BY ao.last_modified_date) as next_master_activity_category
       FROM ${node.SQL_TABLE_NAME} node
       LEFT JOIN ${node.SQL_TABLE_NAME} master_node ON node.origin_id = master_node.id

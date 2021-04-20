@@ -13,11 +13,11 @@ view: activity_types {
       union select 7, 'KALTURA'
       union select 8, 'RSS_FEED'
       union select 9, 'WEB_LINKS'
-      union select 0, 'STUDY_GUIDE'
-      union select 1, 'CONCEPT_MAP'
-      union select 2, 'NON_MINDTAP'
-      union select 3, 'EXTERNAL_READING'
-      union select 4, 'FILE_DOWNLOAD'
+      union select 10, 'STUDY_GUIDE'
+      union select 11, 'CONCEPT_MAP'
+      union select 12, 'NON_MINDTAP'
+      union select 13, 'EXTERNAL_READING'
+      union select 14, 'FILE_DOWNLOAD'
     ;;
   }
 
