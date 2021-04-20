@@ -41,10 +41,11 @@ view: node_chapter {
               )
 
           -- This is the "main select".
-            select c.*, o.full_order
+            select c.master_node_id, c.chapter, MIN(o.full_order) as chapter_order
             from chapters c
             left join ${node_order.SQL_TABLE_NAME} o  ON c.master_node_id = o.node_id
             where node_type = 'com.cengage.nextbook.learningunit.Activity'
+            group by 1, 2
             order by 1
             ;;
 
@@ -55,9 +56,9 @@ view: node_chapter {
   }
 
   dimension: master_node_id {primary_key: yes hidden:yes}
-  dimension: full_order {hidden:yes}
+  dimension: chapter_order {hidden:yes}
   dimension: chapter {
     description: "The highest level 'com.cengage.nextbook.learningunit.LearningUnit' node_type above this activity"
-    order_by_field: full_order
+    order_by_field: chapter_order
     }
 }
