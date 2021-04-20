@@ -41,7 +41,7 @@ view: node_chapter {
               )
 
           -- This is the "main select".
-            select c.master_node_id, c.chapter, MIN(o.full_order) as chapter_order
+            select c.master_node_id, c.chapter, MIN(MIN(o.full_order)) OVER(PARTITION BY c.chapter) as chapter_order
             from chapters c
             left join ${node_order.SQL_TABLE_NAME} o  ON c.master_node_id = o.node_id
             where node_type = 'com.cengage.nextbook.learningunit.Activity'
