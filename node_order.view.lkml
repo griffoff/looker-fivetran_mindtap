@@ -9,6 +9,7 @@ explore: node_order {
 view: node_order {
 
   derived_table: {
+    publish_as_db_view: yes
     create_process: {
       sql_step: use warehouse heavyduty ;;
       sql_step:
