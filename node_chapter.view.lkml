@@ -1,4 +1,5 @@
 include: "//core/datagroups.lkml"
+include: "node_order.view"
 
 explore: node_chapter {
   hidden: yes
