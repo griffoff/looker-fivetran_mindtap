@@ -70,7 +70,7 @@ view: student_activity_graph {
           , 'Start Chapter' AS activity_type_name
           , 'N/A' AS  master_activity_category
           , 'N/A' AS  activity_category
-          , -MIN(master_node_id) AS master_node_id
+          , MIN(master_node_id) AS master_node_id
           , COALESCE(chapter, 'UNKNOWN')
         FROM activities_completed
         GROUP BY
