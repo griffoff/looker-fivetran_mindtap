@@ -158,6 +158,10 @@ view: student_activity_graph {
       value_format_name: decimal_0
     }
 
-    measure: student_count {type:count_distinct sql: ${user_id};;}
+    measure: student_count {
+      type:count_distinct
+      sql: ${user_id};;
+      allow_approximate_optimization: yes
+    }
 
   }

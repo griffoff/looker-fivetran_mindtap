@@ -130,5 +130,6 @@ view: user {
   measure: count {
     type: count
     drill_fields: [id, fname, lname, source_name, username]
+    allow_approximate_optimization: yes
   }
 }
