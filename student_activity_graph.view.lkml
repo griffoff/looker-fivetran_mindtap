@@ -64,13 +64,13 @@ view: student_activity_graph {
         SELECT
             HASH(user_id, snapshot_id, chapter) AS activity_outcome_id
           , user_id, snapshot_id, -1 AS activity_id
-          , '** START CHAPTER: ' || COALESCE(chapter, 'UNKNOWN') || ' **' AS activity_name
-          , ' ' || MIN(activity_order) AS activity_order
+          , '** START: ' || COALESCE(chapter, 'UNKNOWN SECTION') || ' **' AS activity_name
+          , MIN(activity_order) AS activity_order
           , MIN(activity_time_epoch) - 1 AS activity_time_epoch
           , 'Start Chapter' AS activity_type_name
           , 'N/A' AS  master_activity_category
           , 'N/A' AS  activity_category
-          , -1 AS master_node_id
+          , -MIN(master_node_id) AS master_node_id
           , COALESCE(chapter, 'UNKNOWN')
         FROM activities_completed
         GROUP BY
@@ -86,13 +86,13 @@ view: student_activity_graph {
           AS
           SELECT
             *
-            ,COALESCE(LEAD(activity_name) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch), '** END OF CLASS **') as next_activity_name
+            ,COALESCE(LEAD(activity_name) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch), '** NO MORE ACTIVITY **') as next_activity_name
             ,COALESCE(LEAD(activity_order) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch), '999.999.999.999.999') as next_activity_order
             ,LEAD(activity_category) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch) as next_activity_category
             ,LEAD(activity_type_name) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch) as next_activity_type_name
             ,LEAD(master_activity_category) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch) as next_master_activity_category
             ,COALESCE(LEAD(master_node_id) OVER (PARTITION BY snapshot_id, user_id ORDER BY activity_time_epoch), -1) as next_master_node_id
-            ,COUNT(*) OVER (PARTITION BY master_node_id) AS users_who_did_this
+            ,COUNT(DISTINCT user_id) OVER (PARTITION BY master_node_id) AS users_who_did_this
             ,NULL::INT AS users_who_did_this_next
             ,NULL::FLOAT AS users_who_took_this_path_percent
             ,NULL::INT AS path_rank
@@ -105,6 +105,11 @@ view: student_activity_graph {
           SET users_who_did_this_next = x.n
               ,users_who_took_this_path_percent = x.n / users_who_did_this
               ,path_rank = x.p
+              ,activity_order =
+                CASE WHEN next_activity_name IS NULL THEN '999.' ELSE '000.' END
+                || activity_order ||
+                CASE WHEN activity_id = -1 THEN '.000' ELSE '.001' END
+
           FROM (
                     SELECT
                       master_node_id, next_master_node_id
@@ -131,6 +136,7 @@ view: student_activity_graph {
     dimension: user_id {hidden: yes}
     dimension: snapshot_id {hidden:yes}
     dimension: activity_id {hidden:yes}
+    dimension: master_node_id {hidden:yes}
     dimension: activity_category {description: "CTG/Practice/Instructional"}
     dimension: master_activity_category {description: "Intended CTG/Practice/Instructional"}
     dimension: next_activity_category {description: "CTG/Practice/Instructional"}
