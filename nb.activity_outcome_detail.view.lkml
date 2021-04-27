@@ -25,7 +25,7 @@ view: activity_outcome_detail_ext {
       from mindtap.PROD_NB.ACTIVITY_OUTCOME_DETAIL
       ;;
 
-    persist_for: "24 hours"
+    datagroup_trigger: daily_refresh
   }
 
   dimension: id {
