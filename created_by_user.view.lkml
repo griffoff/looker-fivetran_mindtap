@@ -18,10 +18,12 @@ view: created_by_user {
   dimension: role_id {
     type:number
     group_label:"Created By"
+    label: "Created By Role Id"
     }
 
   dimension: role {
     group_label:"Created By"
+    label: "Created By Role"
     type:string
     case: {
       when: {label:"Instructor" sql: ${role_id} = 1003;;}
