@@ -148,10 +148,10 @@ view: student_activity_graph {
     dimension: next_activity_name {order_by_field:next_activity_order}
     dimension: next_activity_type_name {label:"Next Activity Type"}
     dimension: users_who_took_this_path_percent {
-      label: "% Users who took this path"
+      label: "% Overall Users who took this path"
       type:number
       value_format_name: percent_1
-      description:"% of users who did the next next activity after doing the first"
+      description:"% of all users who did the next activity after doing the first"
       }
     dimension: path_rank {
       type: number

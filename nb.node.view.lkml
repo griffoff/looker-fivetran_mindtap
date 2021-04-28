@@ -1,4 +1,5 @@
 include:"nb.activity.view"
+include:"created_by_user.view"
 include:"node_order.view"
 include:"node_chapter.view"
 
@@ -20,7 +21,13 @@ explore: node {
     relationship: one_to_one
   }
 
-  # extension: required
+  join: created_by_user {
+    view_label: "Node"
+    sql_on: ${node.created_by} = ${created_by_user.user_id}
+    and ${node.snapshot_id} = ${created_by_user.snapshot_id};;
+    relationship: many_to_one
+  }
+
   join: activity {
     sql_on: ${node.id} = ${activity.id} ;;
     relationship: one_to_one
@@ -92,8 +99,9 @@ view: node {
     sql: ${TABLE}."CREATED_BY" ;;
   }
 
-  dimension: created_date {
-    type: number
+  dimension_group: created_date {
+    label: "Created"
+    type: time
     sql: ${TABLE}."CREATED_DATE" ;;
   }
 
