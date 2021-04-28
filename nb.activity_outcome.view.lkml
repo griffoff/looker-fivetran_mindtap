@@ -26,6 +26,8 @@ explore: activity_outcome {
 view: activity_outcome {
   sql_table_name: mindtap.PROD_NB.ACTIVITY_OUTCOME ;;
 
+  drill_fields: [activity.app_activity_id, activity_outcome_detail.count]
+
   dimension: id {
     primary_key: yes
     type: number
@@ -233,6 +235,11 @@ view: activity_outcome {
     sql: CASE WHEN ${attempts} > 0 THEN ${activity_id} END  ;;
   }
 
+  dimension: user_completed {
+    hidden: yes
+    sql: CASE WHEN ${attempts} > 0 THEN ${user_id} END  ;;
+  }
+
   measure: practice_activities_completed_count {
     label: "# Practice activities completed"
     type: number
@@ -259,6 +266,11 @@ view: activity_outcome {
 
   measure: count {
     type: count
-    drill_fields: [id, activity.app_activity_id, activity_outcome_detail.count]
+  }
+
+  measure: user_count {
+    label: "# Users who completed this activity"
+    type: count_distinct
+    sql: ${user_completed} ;;
   }
 }
