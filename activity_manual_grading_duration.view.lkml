@@ -74,7 +74,7 @@ view: activity_manual_grading_duration {
         )
       ;;
     }
-    persist_for: "8 hours"
+    datagroup_trigger: daily_refresh
   }
 
   dimension_group: event_time  {
