@@ -19,7 +19,7 @@ view: activity_outcome_detail_ext {
   derived_table: {
     sql:
      select
-        activity_outcome_detail_id
+        activity_outcome_detail.id
         ,lead(take_start_time) over (partition by activity_id, user_id order by take_start_time) as next_take_start_time
         ,lead(id) over (partition by activity_outcome_id order by id) is null as is_latest_take
       from mindtap.PROD_NB.ACTIVITY_OUTCOME_DETAIL
