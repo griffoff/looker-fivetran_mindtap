@@ -68,11 +68,13 @@ explore: +snapshot {
     type: inner
   }
   join: role {
+    view_label: "User Role"
     sql_on: ${user_org_profile.role_id} = ${role.id} ;;
     relationship: many_to_one
     type: inner
   }
   join: lms_user_info {
+    view_label: "User LMS Info"
     sql_on: ${user.source_id} = ${lms_user_info.uid};;
     relationship:  one_to_many
     type:  left_outer
@@ -83,7 +85,9 @@ explore: +snapshot {
     fields: []
     sql_on: ${snapshot.org_id} = ${instructors.org_id}
       and ${instructors.role_id} = 1003
-      and ${user_org_profile.id} = ${instructors.id};;
+      {% if user_org_profile._in_query %}
+      and ${user_org_profile.id} = ${instructors.id}
+      {% endif %};;
     relationship: one_to_many
     type: inner
   }
@@ -95,6 +99,7 @@ explore: +snapshot {
   }
 
   join: students {
+    view_label: "Student Org Profile"
     from:  user_org_profile
     fields: [students.user_count, students.randomizer]
     sql_on: ${snapshot.org_id} = ${students.org_id}
