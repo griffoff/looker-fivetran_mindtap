@@ -2,6 +2,7 @@ include: "activity_manual_grading_duration.view"
 include: "activity_types.view"
 include: "nb.activity_outcome.view"
 include: "nb.app_activity.view"
+#include: "nb.node.view"
 
 explore: activity {
   extends: [app_activity]
@@ -30,6 +31,11 @@ explore: activity {
     relationship: one_to_many
   }
 
+  # join: node {
+  #   sql_on: ${activity.id} = ${node.id} ;;
+  #   relationship: one_to_one
+  # }
+
   join: activity_outcome {
     sql_on: ${activity.id} = ${activity_outcome.activity_id} ;;
     relationship: one_to_many
@@ -48,6 +54,12 @@ explore: master_activity {
     relationship: one_to_many
   }
 
+  # join: master_node {
+  #   from: node
+  #   sql_on: ${master_activity.id} = ${master_node.id} ;;
+  #   relationship: one_to_one
+  # }
+
 }
 
 view: +activity {
@@ -55,7 +67,8 @@ view: +activity {
   dimension: ctg {
     label: "Counts towards Grade"
     type: yesno
-    sql: ${is_scorable} AND ${is_gradable} ;;
+    #sql: ${is_scorable} AND ${is_gradable} and ${node.is_student_visible};;
+    sql: ${is_scorable} AND ${is_gradable} and node.is_student_visible=1;;
   }
 
   dimension: practice {
