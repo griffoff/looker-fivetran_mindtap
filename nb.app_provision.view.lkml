@@ -1,3 +1,9 @@
+explore: app_provision {
+  from: app_provision
+  view_name: app_provision
+  hidden: yes
+}
+
 view: app_provision {
   sql_table_name: mindtap.prod_nb.APP_PROVISION ;;
 

@@ -1,97 +1,12 @@
-include: "nb.activity_outcome_detail.view"
-include: "nb.activity.view"
-include: "activity_outcome_latest_grade.view"
+include: "nb.activity_outcome.base"
 
 explore: activity_outcome {
   hidden: yes
   from: activity_outcome
   view_name: activity_outcome
-  extends: [activity_outcome_detail]
-  #extension: required
-  join: activity_outcome_latest_grade {
-    view_label: "Activity"
-    sql_on: ${activity_outcome.id} = ${activity_outcome_latest_grade.activity_outcome_id} ;;
-    relationship: one_to_one
-  }
-  join: activity_outcome_detail {
-    sql_on: ${activity_outcome.id} = ${activity_outcome_detail.activity_outcome_id} ;;
-    relationship: one_to_many
-  }
-  join: activity {
-    sql_on: ${activity_outcome.activity_id} = ${activity.id} ;;
-    relationship: many_to_one
-  }
 }
 
-view: activity_outcome {
-  sql_table_name: mindtap.PROD_NB.ACTIVITY_OUTCOME ;;
-
-  drill_fields: [activity.app_activity_id, activity_outcome_detail.count]
-
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}."ID" ;;
-  }
-
-  dimension: _fivetran_deleted {
-    type: yesno
-    sql: ${TABLE}."_FIVETRAN_DELETED" ;;
-  }
-
-  dimension_group: _fivetran_synced {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}."_FIVETRAN_SYNCED" ;;
-  }
-
-  dimension: activity_id {
-    type: number
-    # hidden: yes
-    sql: ${TABLE}."ACTIVITY_ID" ;;
-    hidden: yes
-  }
-
-  dimension: alert {
-    type: string
-    sql: ${TABLE}."ALERT" ;;
-  }
-
-  dimension: attempts {
-    type: number
-    sql: ${TABLE}."ATTEMPTS" ;;
-  }
-
-  dimension: created_by {
-    type: number
-    sql: ${TABLE}."CREATED_BY" ;;
-    hidden: yes
-  }
-
-  dimension_group: created_date {
-    type: time
-    timeframes: [raw, date, time, year, month, month_name]
-    sql: to_timestamp(${TABLE}."CREATED_DATE", 3) ;;
-  }
-
-  dimension: current_take_id {
-    type: string
-    sql: ${TABLE}."CURRENT_TAKE_ID" ;;
-  }
-
-  dimension: edited_score {
-    type: number
-    sql: ${TABLE}."EDITED_SCORE" ;;
-    hidden: yes
-  }
+view: +activity_outcome {
 
   dimension: effective_score {
     type: number
@@ -100,81 +15,24 @@ view: activity_outcome {
     value_format_name: percent_1
   }
 
-  dimension: has_late_penalty {
-    type: yesno
-    sql: ${TABLE}."HAS_LATE_PENALTY" ;;
-  }
-
-  dimension: is_dropped {
-    type: yesno
-    sql: ${TABLE}."IS_DROPPED" ;;
-  }
-
-  dimension: is_grade_dropped {
-    type: yesno
-    sql: ${TABLE}."IS_GRADE_DROPPED" ;;
-  }
-
-  dimension: is_partial {
-    type: yesno
-    sql: ${TABLE}."IS_PARTIAL"=1 ;;
-  }
-
-  dimension: is_student {
-    type: yesno
-    sql: ${TABLE}."IS_STUDENT"=1 ;;
-  }
-
-  dimension: last_modified_by {
-    type: number
-    sql: ${TABLE}."LAST_MODIFIED_BY" ;;
+  dimension: activity_completed {
     hidden: yes
+    sql: CASE WHEN ${attempts} > 0 THEN ${activity_id} END  ;;
   }
 
-  dimension_group: last_modified_date {
-    group_label: "Last Modified"
-    type: time
-    timeframes: [raw, minute, hour, day_of_week, date, month, month_name, year]
-    sql: TO_TIMESTAMP(${TABLE}.LAST_MODIFIED_DATE, 3) ;;
-  }
-
-  dimension_group: last_score_modified_time {
-    group_label: "Last Score Modified"
-    type: time
-    timeframes: [raw, minute, hour, date, year, day_of_week, week_of_year, month, month_name]
-    sql: to_timestamp(${TABLE}.LAST_SCORE_MODIFIED_TIME, 3) ;;
-  }
-
-  dimension: points_earned {
-    type: number
-    sql: ${TABLE}."POINTS_EARNED" ;;
-  }
-
-  dimension: points_possible {
-    type: number
-    sql: ${TABLE}."POINTS_POSSIBLE" ;;
-  }
-
-  dimension: remaining_takes {
-    type: number
-    sql: ${TABLE}."REMAINING_TAKES" ;;
-  }
-
-  dimension: snapshot_id {
-    type: number
-    sql: ${TABLE}."SNAPSHOT_ID" ;;
+  dimension: user_completed {
     hidden: yes
+    sql: CASE WHEN ${attempts} > 0 THEN ${user_id} END  ;;
   }
 
-  dimension: user_id {
-    type: number
-    sql: ${TABLE}."USER_ID" ;;
-    hidden: yes
+  measure: over_70 {
+    type: count
+    filters: [effective_score: ">=0.7"]
   }
 
-  dimension: version {
-    type: number
-    sql: ${TABLE}."VERSION" ;;
+  measure: under_70 {
+    type: count
+    filters: [effective_score: "<0.7"]
   }
 
   measure: activity_score_average {
@@ -228,44 +86,6 @@ view: activity_outcome {
     type: average
     sql: NULLIF(${attempts}, 0) ;;
     value_format_name: decimal_2
-  }
-
-  dimension: activity_completed {
-    hidden: yes
-    sql: CASE WHEN ${attempts} > 0 THEN ${activity_id} END  ;;
-  }
-
-  dimension: user_completed {
-    hidden: yes
-    sql: CASE WHEN ${attempts} > 0 THEN ${user_id} END  ;;
-  }
-
-  measure: practice_activities_completed_count {
-    label: "# Practice activities completed"
-    type: number
-    sql: COUNT(DISTINCT CASE WHEN ${activity.is_scorable} AND NOT ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
-  }
-
-  measure: graded_activities_completed_count {
-    label: "# Graded activities completed"
-    type: number
-    sql: COUNT(DISTINCT CASE WHEN ${activity.is_gradable} THEN ${activity_outcome.activity_completed} END);;
-  }
-
-  measure: other_activities_completed_count {
-    label: "# Other activities completed"
-    type: number
-    sql: COUNT(DISTINCT CASE WHEN NOT ${activity.is_scorable} THEN ${activity_outcome.activity_completed} END);;
-  }
-
-  measure: total_activities_completed_count {
-    label: "# Total activities completed"
-    type: number
-    sql: COUNT(DISTINCT ${activity_outcome.activity_completed});;
-  }
-
-  measure: count {
-    type: count
   }
 
   measure: user_count {
