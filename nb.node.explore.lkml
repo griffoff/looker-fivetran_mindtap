@@ -76,6 +76,7 @@ view: +node {
   }
 
   measure: average_activities_per_course_section {
+    view_label: "Activity"
     label: "Avg. Activities Setup per Course Section"
     description: "Average Number of Activities Setup per Course Section"
     type: number
