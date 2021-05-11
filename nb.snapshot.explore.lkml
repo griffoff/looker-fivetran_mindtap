@@ -3,13 +3,90 @@ include: "nb.course.view"
 include: "nb.role.view"
 include: "nb.org.view"
 include: "nb.snapshot.view"
+include: "nb.activity_outcome.view"
 include: "nb.student_outcome_summary.view"
 include: "nb.user_org_profile.view"
 include: "lms_user_info.view"
 include: "student_activity_sequence.view"
 include: "student_activity_graph.view"
+include: "nb.user_node.view"
+include: "/lots/*.view"
 
 explore: +snapshot {
+  extends: [org, course, activity_outcome, node]
+  from: snapshot
+  view_name: snapshot
+  sql_always_where: not ${snapshot._fivetran_deleted} ;;
+  hidden: yes
+  # ${snapshot.is_master} = 0
+
+  join: student_outcome_summary {
+    sql_on: ${snapshot.id} = ${student_outcome_summary.snapshot_id}
+      {% if student._in_query %}
+      and ${student.id} = ${student_outcome_summary.user_id}
+      {% endif %}
+      ;;
+    relationship: one_to_one
+  }
+  join: node {
+    sql_on: ${snapshot.id} = ${node.snapshot_id};;
+    relationship: one_to_many
+  }
+  join: due_date_extension {
+    from: user_node
+    sql_on: ${students.user_id} = ${due_date_extension.user_id}
+      and ${node.id} = ${due_date_extension.node_id}
+      and ${due_date_extension.end_date_raw} IS NOT NULL
+      ;;
+    relationship: one_to_one
+  }
+
+  join: activity_outcome {
+    sql_on: ${snapshot.id} = ${activity_outcome.snapshot_id}
+      {% if student._in_query %}
+        and ${student.id} = ${activity_outcome.user_id}
+      {% endif %}
+      {% if node._in_query %}
+        and ${node.id} = ${activity_outcome.activity_id}
+      {% endif %}
+      ;;
+    relationship: one_to_many
+  }
+
+  join: student_activity_sequence {
+    sql_on: ${snapshot.id} = ${student_activity_sequence.snapshot_id}
+      {% if student._in_query %}
+        and ${student.id} = ${student_activity_sequence.user_id}
+      {% endif %}
+      ;;
+    relationship: one_to_one
+  }
+
+  join: navarro_section_items {
+    view_label: " * LOTS"
+    sql_on: ${org.external_id} = ${navarro_section_items.course_key} ;;
+    relationship: one_to_many
+  }
+  join: navarro_assignments_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${navarro_assignments_items.assignment_name} and ${navarro_section_items.section} = ${navarro_assignments_items.section} ;;
+    relationship: one_to_many
+  }
+  join: ichs_assignments_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${ichs_assignments_items.assignment} ;;
+    relationship: one_to_many
+  }
+  join: liberty_bio_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${liberty_bio_items.assignment} ;;
+    relationship: one_to_many
+  }
+  join: rcc_assignment_level_items {
+    view_label: " * LOTS"
+    sql_on: ${node.name} = ${rcc_assignment_level_items.assignment} ;;
+    relationship: one_to_many
+  }
   join: org {
     sql_on: ${snapshot.org_id} = ${org.id} ;;
     relationship: one_to_one
