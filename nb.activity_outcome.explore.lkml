@@ -1,12 +1,13 @@
 include: "nb.activity_outcome.view"
 include: "nb.activity_outcome_detail.view"
-include: "nb.activity.explore"
+include: "nb.activity.view"
+include: "nb.node.explore"
 include: "activity_outcome_latest_grade.view"
 
 explore: +activity_outcome {
   from: activity_outcome
   view_name: activity_outcome
-  extends: [activity_outcome_detail, activity]
+  extends: [activity_outcome_detail, node]
   #extension: required
   join: activity_outcome_latest_grade {
     view_label: "Activity"
@@ -21,6 +22,10 @@ explore: +activity_outcome {
     sql_on: ${activity_outcome.activity_id} = ${activity.id} ;;
     relationship: many_to_one
   }
+  join: node {
+    sql_on: ${activity_outcome.activity_id} = ${node.id} ;;
+    relationship: one_to_one
+  }
 }
 
 view: +activity_outcome {
@@ -33,7 +38,7 @@ view: +activity_outcome {
   measure: graded_activities_completed_count {
     label: "# Graded activities completed"
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${node.counts_towards_grade} THEN ${activity_outcome.activity_completed} END);;
+    sql: COUNT(DISTINCT CASE WHEN ${node.ctg} THEN ${activity_outcome.activity_completed} END);;
   }
 
   measure: other_activities_completed_count {

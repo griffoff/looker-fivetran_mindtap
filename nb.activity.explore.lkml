@@ -3,6 +3,7 @@ include: "activity_types.view"
 include: "nb.activity.view"
 include: "nb.activity_outcome.view"
 include: "nb.app_activity.view"
+include: "nb.node.view"
 
 explore: +activity {
   extends: [app_activity]
@@ -31,10 +32,10 @@ explore: +activity {
     relationship: one_to_many
   }
 
-  join: activity_outcome {
-    sql_on: ${activity.id} = ${activity_outcome.activity_id} ;;
-    relationship: one_to_many
-  }
+  # join: activity_outcome {
+  #   sql_on: ${activity.id} = ${activity_outcome.activity_id} ;;
+  #   relationship: one_to_many
+  # }
 }
 
 explore: master_activity {
