@@ -36,6 +36,7 @@ explore: +activity {
   #   sql_on: ${activity.id} = ${activity_outcome.activity_id} ;;
   #   relationship: one_to_many
   # }
+
 }
 
 explore: master_activity {

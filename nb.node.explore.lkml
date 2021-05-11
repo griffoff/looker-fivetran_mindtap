@@ -68,10 +68,19 @@ view: +node {
 
   dimension: ctg {
     label: "Counts towards Grade"
+    description: "activity.is_gradable AND activity.is_scorable AND node.is_student_visible"
     view_label: "Activity"
     type: yesno
     sql: ${activity.is_scorable} AND ${activity.is_gradable} and ${node.is_student_visible};;
     # sql: ${is_scorable} AND ${is_gradable} and node.is_student_visible=1;;
+  }
+
+  measure: average_activities_per_course_section {
+    label: "Avg. Activities Setup per Course Section"
+    description: "Average Number of Activities Setup per Course Section"
+    type: number
+    sql: ${activity.count}/${count_distinct_courses};;
+    value_format_name: decimal_1
   }
 
   dimension: name {

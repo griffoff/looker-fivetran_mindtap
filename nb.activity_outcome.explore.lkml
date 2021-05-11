@@ -29,6 +29,7 @@ explore: +activity_outcome {
 }
 
 view: +activity_outcome {
+
   measure: practice_activities_completed_count {
     label: "# Practice activities completed"
     type: number
@@ -51,5 +52,12 @@ view: +activity_outcome {
     label: "# Total activities completed"
     type: number
     sql: COUNT(DISTINCT ${activity_outcome.activity_completed});;
+  }
+
+  measure: total_activities_completed_percent {
+    label: "% Total activities completed"
+    type: number
+    sql: ${total_activities_completed_count} / ${activity.count};;
+    value_format_name: percent_1
   }
 }
