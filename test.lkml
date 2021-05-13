@@ -23,7 +23,7 @@ explore: C {
     sql_on: 1=1;;
     view_label:"Y"
     relationship:one_to_many
-    }
+  }
 }
 
 # this is where the problem is

@@ -1,4 +1,5 @@
 explore: node {
+  hidden: yes
   from: node
   view_name: node
   view_label: "Node"
