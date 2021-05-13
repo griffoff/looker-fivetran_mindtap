@@ -1,4 +1,5 @@
 include: "nb.activity_outcome.view"
+include: "nb.student_outcome_summary.view"
 include: "nb.activity_outcome_detail.view"
 include: "nb.activity.view"
 include: "nb.node.explore"
@@ -25,6 +26,10 @@ explore: +activity_outcome {
   join: node {
     sql_on: ${activity_outcome.activity_id} = ${node.id} ;;
     relationship: one_to_one
+  }
+  join: student_outcome_summary {
+    sql_on: ${activity_outcome.user_id} = ${student_outcome_summary.user_id} and ${activity_outcome.snapshot_id} = ${student_outcome_summary.snapshot_id}  ;;
+    relationship: many_to_one
   }
 }
 
@@ -59,5 +64,9 @@ view: +activity_outcome {
     type: number
     sql: ${total_activities_completed_count} / ${activity.count};;
     value_format_name: percent_1
+  }
+
+  measure: correlation_with_final_score {
+    sql: CORR(${effective_score}, ${student_outcome_summary.score}) ;;
   }
 }
