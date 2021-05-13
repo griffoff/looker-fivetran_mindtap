@@ -19,7 +19,11 @@ explore: A {
 }
 
 explore: C {
-  join: B {}
+  join: B {
+    sql_on: 1=1;;
+    view_label:"Y"
+    relationship:one_to_many
+    }
 }
 
 # this is where the problem is
@@ -32,11 +36,10 @@ explore: C {
 # extending C that joins to B, the join to B is kept
 explore: B {
   join: C {}
-  #join: B {}
+  # join: B {}
 }
 
 explore: +B {
-  join: C {}
   join: C {}
 }
 
@@ -44,6 +47,10 @@ explore: +B {
 # extending C that includes a join to B, the join to B in D is merged
 explore: D {
   extends: [A, C]
-  join: A {}
-  join: B {}
+  join: A {
+
+  }
+  join: B {
+    view_label: "X"
+  }
 }
