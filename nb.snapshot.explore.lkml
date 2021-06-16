@@ -41,6 +41,11 @@ explore: +snapshot {
     relationship: one_to_one
   }
 
+  join: activity {
+    sql_on: ${node.id} = ${activity.id} ;;
+    relationship: one_to_one
+  }
+
   join: activity_outcome {
     sql_on: ${snapshot.id} = ${activity_outcome.snapshot_id}
       {% if student._in_query %}
