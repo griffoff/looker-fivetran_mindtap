@@ -171,13 +171,13 @@ explore: +snapshot {
       and ${user_org_profile.id} = ${instructors.id}
       {% endif %};;
     relationship: one_to_many
-    type: inner
+    # type: inner
   }
   join: instructor {
     from: user
     sql_on: ${instructors.user_id} = ${instructor.id} ;;
     relationship: one_to_one
-    type: inner
+    # type: inner
   }
 
   join: students {
@@ -191,14 +191,14 @@ explore: +snapshot {
       {% endif %}
       ;;
     relationship: one_to_many
-    type: inner
+    # type: inner
   }
 
   join: student {
     from: user
     sql_on: ${students.user_id} = ${student.id};;
     relationship: one_to_one
-    type: inner
+    # type: inner
   }
 }
 
