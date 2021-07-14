@@ -41,7 +41,7 @@ view: node {
   dimension_group: created_date {
     label: "Created"
     type: time
-    sql: ${TABLE}."CREATED_DATE" ;;
+    sql: to_timestamp(${TABLE}."CREATED_DATE", 3) ;;
   }
 
   dimension: description {
@@ -81,9 +81,10 @@ view: node {
     sql: ${TABLE}."LAST_MODIFIED_BY" ;;
   }
 
-  dimension: last_modified_date {
-    type: number
-    sql: ${TABLE}."LAST_MODIFIED_DATE" ;;
+  dimension_group: last_modified_date {
+    type: time
+    sql: to_timestamp(${TABLE}."LAST_MODIFIED_DATE", 3) ;;
+
   }
 
   dimension: name {
